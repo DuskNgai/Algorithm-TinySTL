@@ -43,7 +43,7 @@ namespace Algorithm {
         auto middle = std::next(first, std::distance(first, last) / 2);
         MergeSort(first, middle, comp);
         MergeSort(middle, last, comp);
-        TinySTL::inplace_merge(first, middle, last, comp);
+        Merge(first, middle, last, comp);
     }
 
 }

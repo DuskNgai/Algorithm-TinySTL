@@ -1,6 +1,6 @@
 # Algorithm & TinySTL
 
-Simple implementations of *"Introduction to Algorithm"* by `C++` (major) and `Python` (minor). Since the whole project is build on C++98/C++11 standard, it looks clumsy.
+Simple implementations of *"Introduction to Algorithm"* by `C++` (major) and `Python` (minor). Since the whole project is build on `C++98`/`C++11` standard, it looks quite clumsy.
 
 Some simple algorithms and data structures are implemented in [TinySTL](https://github.com/DuskNgai/TinySTL).
 
@@ -40,8 +40,8 @@ make -j
 
 - [x] Part 1 Foundations
     - [x] Chapter 1 The Role of Algorithms in Computing
-    - [ ] Chapter 2 Getting Started
-    - [ ] Chapter 3 Characterizing Running Times
+    - [x] Chapter 2 Getting Started
+    - [x] Chapter 3 Characterizing Running Times
     - [ ] Chapter 4 Divide-and-Conquer
     - [ ] Chapter 5 Probabilistic Analysis and Randomized Algorithms
 - [ ] Part 2 Sorting and Order Statistics
