@@ -18,7 +18,7 @@ protected:
     TinySTL::vector<int> large, large_copy;
 
 protected:
-    virtual void SetUp() {
+    virtual void SetUp() override {
         {
             // Repeating terms.
             int data[] = {11, 1, 51, 1, 5, 3};
