@@ -89,7 +89,22 @@ f(n)=O(g(n)) \ \Leftrightarrow \ g(n)=\Omega(f(n))\\
 f(n)=o(g(n)) \ \Leftrightarrow \ g(n)=\omega(f(n))
 $$
 
-### 3.3 Standard Notations and Common Functions
+## 3.3 Standard Notations and Common Functions
+
+### Exercises
+
+#### 3.3-7
+
+> Show that the golden ratio $\phi$ and its conjugate $\hat\phi$ both satisfy the equation $x^2=x+1$
+
+$$
+x_1,x_2=\frac{1\pm\sqrt{5}}{2}
+$$
+
+## Problems
+
+### 3-3 Ordering by asymptotic growth rates
+
 
 $$
 1<n^{\frac{1}{\ln n}}<\ln(\ln^*n)<\ln^*(\ln n)<\ln^*n<2^{\ln^*n}<\\
@@ -98,4 +113,76 @@ $$
 n^{\ln \ln n}\le(\ln n)^{\ln n}<4^{\ln n}<(\frac{3}{2})^n<2^n<n2^n<\\
 e^n<(\ln n)!<n!<(n+1)!<2^{2^n}<2^{2^{n+1}}
 $$
+
+### 3-4 Asymptotic notation properties
+
+> Let $f(n)$ and $g(n)$ be asymptotically positive functions. Prove or disprove each of the following conjectures.
+
+> a. $f(n)=O(g(n))$ implies $g(n)=O(f(n))$.
+
+Disprove: $n=O(n^2)$.
+
+> b. $f(n)+g(n)=\Theta(\min\{f(n),g(n)\})$.
+
+Only the below relation holds:
+$$
+\min\{f(n),g(n)\}\le\frac{f(n)+g(n)}{2}
+$$
+Disprove: $n+n^2=\Theta(n)\ne\Theta(n^2)$.
+
+> c. $f(n)=O(g(n))$ implies $\log f(n)=O(\log g(n))$, where $\log g(n)\ge1$ and $f(n)\ge1$ for all sufficiently large $n$.
+
+Since:
+$$
+O(g(n))=\{f(n)|\exist c>0,\exist n_0>0:\forall n\ge n_0,0\le f(n)\le cg(n)\}
+$$
+And $\log g(n)\ge1$ and $f(n)\ge1$ for all sufficiently large $n$, then:
+$$
+\log f(n)\le \log cg(n)
+$$
+Let $d>\log c+1$, then
+$$
+d\log g(n)=(\log c+1)\log g(n)\ge\log c+\log g(n)=\log cg(n)
+$$
+Then
+$$
+\exist d>0,\exist n_1>0:\forall n\ge n_1,0\le\log f(n)\le\log cg(n)\le d\log g(n)\}
+$$
+which means: $\log f(n)=O(\log g(n))$
+
+> d. $f(n)=O(g(n))$ implies $2^{f(n)}=O(2^{g(n)})$.
+
+Disprove: $2n=O(n)$, but $2^{2n}=4^n\ne O(2^n)$.
+
+> e. $f(n)=O((f(n))^2)$.
+
+Disprove: $1/n\ne O(1/n^2)$.
+
+> f. $f(n)=O(g(n))$ implies $g(n)=\Omega(f(n))$.
+
+Since:
+$$
+O(g(n))=\{f(n)|\exist c>0,\exist n_0>0:\forall n\ge n_0,0\le f(n)\le cg(n)\}
+$$
+Then let $d=1/c$ and
+$$
+\Omega(f(n))=\{g(n)|\exist c>0,\exist n_0>0:\forall n\ge n_0,0\le dg(n)\le f(n)\}
+$$
+always holds.
+
+> g. $f(n)=\Theta(f(n/2))$.
+
+Disprove: $f(n)=2^n$, but $f(n)\ne\Theta(2^{n/2})$.
+
+> h. $f(n)+o(f(n))=\Theta(f(n))$.
+
+Since:
+$$
+o(f(n))=\{g(n)|\forall c>0,\exist n_0>0:\forall n\ge n_0,0\le g(n)<cf(n)\}
+$$
+Then let $c_1=1,c_2=c+1$ and
+$$
+0\le c_1f(n)\le f(n)+g(n)<(c+1)f(n)\le c_2f(n)
+$$
+always holds.
 

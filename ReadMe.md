@@ -6,6 +6,8 @@ Some simple algorithms and data structures are implemented in [TinySTL](https://
 
 You may find some official `Python` code in [this link](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/11599/clrsPython.zip).
 
+In the first round, we will go through the whole book. In the second round, we will try to solve all the questions.
+
 ## Requirement & Usage
 
 一个支持 `C++11` 标准的编译器。我们在以下平台 + 编译器的组合上测试了我们的程序：
