@@ -44,8 +44,8 @@ make -j
     - [x] Chapter 1 The Role of Algorithms in Computing
     - [x] Chapter 2 Getting Started
     - [x] Chapter 3 Characterizing Running Times
-    - [ ] Chapter 4 Divide-and-Conquer
-    - [ ] Chapter 5 Probabilistic Analysis and Randomized Algorithms
+    - [x] Chapter 4 Divide-and-Conquer
+    - [x] Chapter 5 Probabilistic Analysis and Randomized Algorithms
 - [ ] Part 2 Sorting and Order Statistics
     - [ ] Chapter 6 Heapsort
     - [ ] Chapter 7 Quicksort
