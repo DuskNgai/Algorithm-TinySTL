@@ -47,7 +47,7 @@ make -j
     - [x] Chapter 4 Divide-and-Conquer
     - [x] Chapter 5 Probabilistic Analysis and Randomized Algorithms
 - [ ] Part 2 Sorting and Order Statistics
-    - [ ] Chapter 6 Heapsort
+    - [x] Chapter 6 Heapsort
     - [ ] Chapter 7 Quicksort
     - [ ] Chapter 8 Sorting in Linear Time
     - [ ] Chapter 9 Medians and Order Statistics

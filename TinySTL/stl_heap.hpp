@@ -6,15 +6,15 @@
 namespace TinySTL {
 
     // Top index is 0 not 1.
-    //      1
+    //      0
     //    /   \
-    //   2     3
+    //   1     2
     //  / \   / \
-    // 4   5 6   7
+    // 3   4 5   6
     // ...
-    // parent = (hole_index - 1) / 2
-    // left_child = hole_index * 2 + 1
-    // right_child = hole_index * 2 + 2
+    // parent       = (hole_index - 1) / 2 = (hole_index - 1) >> 1
+    // first_child  = hole_index * 2 + 1   = (hole_index << 1) + 1
+    // second_child = hole_index * 2 + 2   = (hole_index << 1) + 2
 
     //! Push Heap.
 
@@ -32,7 +32,7 @@ namespace TinySTL {
     }
 
     template <typename RandomAccessIterator, typename Distance, typename T>
-    inline void __push_heap_aux(RandomAccessIterator first, RandomAccessIterator last, Distance, T*) {
+    inline void __push_heap_aux(RandomAccessIterator first, RandomAccessIterator last, Distance*, T*) {
         __push_heap(first, Distance((last - first) - 1), Distance(0), T(*(last - 1)));
     }
 
@@ -170,7 +170,7 @@ namespace TinySTL {
 
     template <typename RandomAccessIterator>
     inline void make_heap(RandomAccessIterator first, RandomAccessIterator last) {
-        __make_heap(first, last, value_type(first), difference_type(first));
+        __make_heap(first, last, difference_type(first), value_type(first));
     }
 
     template <typename RandomAccessIterator, typename Compare, typename Distance, typename T>
@@ -217,6 +217,46 @@ namespace TinySTL {
     }
 
     //! Sort Heap.
+
+    template <typename RandomAccessIterator, typename Distance>
+    bool __is_heap(RandomAccessIterator first, Distance n) {
+        Distance parent = 0;
+        // Compare with its child.
+        for (Distance child = 1; child < n; ++child) {
+            if (*(first + parent) < *(first + child)) {
+                return false;
+            }
+            // The second child is evenly indexed.
+            if ((child & 1) == 0) {
+                ++parent;
+            }
+        }
+        return true;
+    }
+
+    template <typename RandomAccessIterator, typename Compare, typename Distance>
+    bool __is_heap(RandomAccessIterator first, Distance n, Compare comp) {
+        Distance parent = 0;
+        for (Distance child = 1; child < n; ++child) {
+            if (comp(*(first + parent), *(first + child))) {
+                return false;
+            }
+            if ((child & 1) == 0) {
+                ++parent;
+            }
+        }
+        return true;
+    }
+
+    template <typename RandomAccessIterator>
+    bool is_heap(RandomAccessIterator first, RandomAccessIterator last) {
+        return __is_heap(first, last - first);
+    }
+
+    template <typename RandomAccessIterator, typename Compare>
+    bool is_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
+        return __is_heap(first, last - first, comp);
+    }
 
 } // namespace TinySTL
 

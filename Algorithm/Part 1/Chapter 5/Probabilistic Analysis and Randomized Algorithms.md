@@ -175,3 +175,226 @@ def RandomPermute(A, n):
 > 
 
 No, $A[0]$ have no probability to stay at where it was once swapped. Then there are a lot of permutation start with $A[0]$ can not be generated, which is not an actuall random algorithm.
+
+## 5.4 Probabilistic Analysis and Further Uses of Indicator Random Variables
+
+### 5.4.1 The birthday paradox
+
+**Assumptions**
+
+1. $n=365$ for number of days in a year.
+2. birthdays are uniformly distributed.
+3. birthdays are independent.
+
+#### The probability that at least two of the birthdays match
+
+Let $b_i$ be the day of the year on which person $i$'s birthday falls, where $1\le b_i\le n$. So $P(b_i=r)=1/n$, $1\le i\le k$, $1\le r\le n$.
+
+The probability that $i$'s birthday and $j$'s birthday both fall on day $r$ is
+$$
+P(b_i=r,b_j=r)=P(b_i=r)P(b_j=r)=\frac{1}{n^2}
+$$
+The probability that they both fall on the same day is
+$$
+\sum_{r=1}^{n}P(b_i=r,b_j=r)=n\cdot\frac{1}{n^2}=\frac{1}{n}
+$$
+The probability that at least two of the birthdays match is 1 minus the probability that all the birthdays are different. The event $B_k$ that $k$ people have distinct birthdays is
+$$
+B_k=\bigcap_{i=1}^{k}A_i
+$$
+where $A_i$ is the event that person $i$'s birthday is different from person $j$'s for all $j < i$. Then $B_k=A_{k}\cap B_{k-1}$, then $P(B_k)=P(B_{k-1})P(A_k|B_{k-1})$.
+$$
+\begin{align*}
+P(B_k)&=P(B_1)P(A_2|B_1)\cdots P(A_k|B_{k-1})\\
+&=1\cdot\left(1-\frac{1}{n}\right)\left(1-\frac{2}{n}\right)\cdots\left(1-\frac{k-1}{n}\right)
+\end{align*}
+$$
+And using $1+x\le e^x$,
+$$
+\begin{align*}
+P(B_k)&=1\cdot\left(1-\frac{1}{n}\right)\left(1-\frac{2}{n}\right)\cdots\left(1-\frac{k-1}{n}\right)\\
+&\le e^{-\sum_{i=1}^{k-1}i/n}\\
+&=e^{-k(k-1)/2n}
+\end{align*}
+$$
+To obtain the probability that at least two of the birthdays match, assume it is $p$, then
+$$
+\begin{align*}
+P(B_k)&=e^{-k(k-1)/2n}\le(1-p)\\
+k(k-1)&\ge2n\ln(1-p)\\
+k&\ge\frac{1+\sqrt{8n\ln(1-p)}}{2}
+\end{align*}
+$$
+Here $k$ is larger than the exact value.
+
+#### The expectation of the number of pairs of individuals having the same birthday
+
+For each pair $(i,j)$ of the $k$ people in the room, define the indicator random variable $X_{ij}$ , for $1\le i<j\le k$​, by
+$$
+\begin{align*}
+X_{ij}&=I(\text{person $i$ and person $j$ have the same birthday})\\
+&=\begin{cases}
+1&\text{person $i$ and person $j$ have the same birthday}\\
+0&\text{otherwise}
+\end{cases}
+\end{align*}
+$$
+By discussion above
+$$
+\mathbb{E}[X_{ij}]=P(\text{person $i$ and person $j$ have the same birthday})=\frac{1}{n}
+$$
+Letting $X$ be the random variable that counts the number of pairs of individuals having the same birthday, we have
+$$
+X=\sum_{i=1}^{k-1}\sum_{j=i+1}^{k}X_{ij}
+$$
+Then the expectation of the number of pairs of individuals having the same birthday is
+$$
+\mathbb{E}[X]=\mathbb{E}\left[\sum_{i=1}^{k-1}\sum_{j=i+1}^{k}X_{ij}\right]=\sum_{i=1}^{k-1}\sum_{j=i+1}^{k}\mathbb{E}[X_{ij}]=\frac{k(k-1)}{2n}
+$$
+
+### 5.4.2 Balls and bins
+
+Consider a process in which you randomly toss identical balls into $b$ bins. The probability that a tossed ball lands in any given bin is $1/b$.
+
+- How many balls fall in a given bin?
+    If follows the binomial distribution $\mathrm{Bin}(n,1/b)$. The expectation is $n/b$.
+- How many balls must you toss, on the average, until a given bin contains a ball?
+    If follows the geometric distribution $\mathrm{Geom}(1/b)$. The expectation is $b$.
+
+#### How many balls must you toss until every bin contains at least one ball?
+
+A toss in which a ball falls into an empty bin a "hit". Let $A_i$ be the tosses after the $(i-1)$ th hit up to and including the $i$ th hit. And $n_i$ be the number of tosses in the $A_i$. Each $A_i$ follows the Bernoulli distribution $\mathrm{Bern}((b-i+1)/b)$ for hit or not hit. Then $n_i=b/(b-i+1)$ and $n_1=1$. 
+$$
+\begin{align*}
+\mathbb{E}[n]&=\mathbb{E}\left[\sum_{i=1}^bn_i\right]=\sum_{i=1}^b\mathbb{E}[n_i]\\
+&=\sum_{i=1}^b\frac{b}{b-i+1}=\sum_{i=1}^b\frac{b}{i}\\
+&=b(\ln b+O(1))
+\end{align*}
+$$
+
+### 5.4.3 Streaks
+
+Suppose that you flip a fair coin $n$ times. What is the longest streak of consecutive heads that you expect to see?
+
+### Exercises
+
+#### 5.4-1
+
+> How many people must there be in a room before the probability that someone has the same birthday as you do is at least $1/2$? How many people must there be before the probability that at least two people have a birthday on July 4 is greater than $1/2$?
+
+The probability that someone has the same birthday as you do is 1 minus the probability that no one has the same birthday as you do. The event $B_k$ that $k$ people have distinct birthdays as you do is
+$$
+B_k=\bigcap_{i=1}^{k}A_i
+$$
+where $A_i$ is the event that person $i$'s birthday is different from you. Since each $A_i$ is independent
+$$
+\begin{align*}
+P(B_k)&=P(A_1)P(A_2)\cdots P(A_k)\\
+&=\left(1-\frac{1}{n}\right)^k\le\frac{1}{2}\\
+k&\ge\frac{1}{\log_2365-\log_2364}=253
+\end{align*}
+$$
+Let $X$ be the event that the number of individuals whose birthday is on July 4. For $X=0$, it is the same situation above. For $X=1$, there is one whose birthday is on July 4 with probability $1/n$. And there is $k$ options, so it is
+$$
+\begin{align*}
+P(X\ge2)&=1-P(X=1)-P(X=0)\\
+&=1-\binom{k}{1}\frac{1}{n}\left(1-\frac{1}{n}\right)^{k-1}-\left(1-\frac{1}{n}\right)^k\\
+&=1-\left(1-\frac{1}{n}\right)^{k-1}\frac{k+n-1}{n}>\frac{1}{2}
+\end{align*}
+$$
+Here $k\ge613$.
+
+#### 5.4-2
+
+> How many people must there be in a room before the probability that two people have the same birthday is at least 0.99? For that many people, what is the expected number of pairs of people who have the same birthday?
+
+Using the same formula in this chapter
+$$
+\begin{align*}
+P(B_k)&=1\cdot\left(1-\frac{1}{n}\right)\left(1-\frac{2}{n}\right)\cdots\left(1-\frac{k-1}{n}\right)\\
+&\le e^{-k(k-1)/2n}\le(1-0.99)
+\end{align*}
+$$
+Here $k\ge57$. The expected number of pairs of people who have the same birthday are
+
+$$
+\mathbb{E}[X]=\frac{k(k-1)}{2n}=4.37
+$$
+
+#### 5.4-3
+
+> You toss balls into $b$ bins until some bin contains two balls. Each toss is independent, and each ball is equally likely to end up in any bin. What is the expected number of ball tosses?
+
+The same as the birthday paradox, which is
+$$
+1\cdot\left(1-\frac{1}{b}\right)\left(1-\frac{2}{b}\right)\cdots\left(1-\frac{k-1}{b}\right)\le e^{-k(k-1)/2b}
+$$
+
+#### 5.4-4
+
+> For the analysis of the birthday paradox, is it important that the birthdays be mutually independent, or is pairwise independence sufficient? Justify your answer.
+
+Pairwise independent. If $a$ and $b$, $a$ and $c$, $b$ and $c$ are pairwise independence, then we can not infer that $a$, $b$ and $c$ are mutually independent.
+
+#### 5.4-5
+
+> How many people should be invited to a party in order to make it likely that there are three people with the same birthday?
+
+For each pair $(i,j,k)$ of the $l$ people in the room, define the indicator random variable $X_{ijk}$ , for $1\le i<j<k\le l$​, by
+$$
+\begin{align*}
+X_{ijk}&=I(\text{person $i$, $j$ and $k$ have the same birthday})\\
+&=\begin{cases}
+1&\text{person $i$, $j$ and $k$ have the same birthday}\\
+0&\text{otherwise}
+\end{cases}
+\end{align*}
+$$
+Easy to prove that
+$$
+\mathbb{E}[X_{ijk}]=P(\text{person $i$, $j$ and $k$ have the same birthday})=\frac{1}{n^2}
+$$
+Letting $X$ be the random variable that counts the number of pairs of individuals having the same birthday, we have
+$$
+X=\sum_{i=1}^{l-2}\sum_{j=i+1}^{l-1}\sum_{k=j+1}^{l}X_{ijk}
+$$
+Then the expectation of the number of pairs of individuals having the same birthday is
+$$
+\mathbb{E}(X)=\sum_{i=1}^{l-2}\sum_{j=i+1}^{l-1}\sum_{k=j+1}^{l}\mathbb{E}[X_{ijk}]=\frac{l(l-1)(l-2)}{6n^2}>1
+$$
+
+Then $l\ge94$.
+
+#### 5.4-6
+
+> What is the probability that a $k$-string (defined on page 1179) over a set of size $n$ forms a $k$-permutation? How does this question relate to the birthday paradox?
+
+$k$ is the number of people, $n$ is the number of days. If forms a $k$-permutation, then all the people have different birthday.
+
+#### 5.4-7 
+
+> You toss $n$ balls into $n$ bins, where each toss is independent and the ball is equally likely to end up in any bin. What is the expected number of empty bins? What is the expected number of bins with exactly one ball?
+
+Let $X_i$ be the event that the $i$ th box is empty, that is, no ball will fall into this box. The probability of a ball to fall into a specific box is $1/n$, and $(n-1)/n$ for not fall into. So for $n$ balls, it is $[(n-1)/n]^n$, which means
+$$
+\mathbb{E}(X_i)=\left(\frac{n-1}{n}\right)^n
+$$
+For $n$ boxes:
+$$
+\mathbb{E}(X)=\sum_{i=1}^n\mathbb{E}(X_i)=n\left(\frac{n-1}{n}\right)^n
+$$
+Let $X_i$ be the event that the $i$ th box has exactly 1 ball. The probability of a ball to fall into a specific box is $1/n$, and $(n-1)/n$ for not fall into. So for $n$ balls, one of them will fall into and others won't, the probability is
+$$
+\mathbb{E}(X_i)=\binom{n}{1}\frac{1}{n}\left(\frac{n-1}{n}\right)^{n-1}
+$$
+For $n$ boxes:
+$$
+\mathbb{E}(X)=\sum_{i=1}^n\mathbb{E}(X_i)=n\left(\frac{n-1}{n}\right)^{n-1}
+$$
+
+#### 5.4-8
+
+> Sharpen the lower bound on streak length by showing that in $n$ flips of a fair coin, the probability is at least $1-1/n$ that a streak of length $\log n-2\log\log n$ consecutive heads occurs.
+
+
+
