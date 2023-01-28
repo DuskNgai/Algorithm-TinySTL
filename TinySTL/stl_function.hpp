@@ -3,7 +3,7 @@
 
 namespace TinySTL {
 
-    //! After C++14, lambda function together with type deduction have taken over these functionalities...
+    //! After C++11, lambda function together with type deduction have taken over these functionalities...
     //! That is, they are all deprecated.
 
     // Two base functor.
@@ -11,14 +11,14 @@ namespace TinySTL {
     template <typename Arg, typename Return>
     struct unary_function {
         using argument_type = Arg;
-        using return_type = Return;
+        using return_type   = Return;
     };
 
     template <typename Arg1, typename Arg2, typename Return>
     struct binary_function {
-        using first_argument_type = Arg1;
+        using first_argument_type  = Arg1;
         using second_argument_type = Arg2;
-        using return_type = Return;
+        using return_type          = Return;
     };
 
     //! ----- Relational ----- !//

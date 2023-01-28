@@ -38,7 +38,7 @@ namespace TinySTL {
         }
 
         static void (*__set_malloc_handler(void (*f)()))() {
-            void (*old)() = __malloc_alloc_oom_handler;
+            void (*old)()              = __malloc_alloc_oom_handler;
             __malloc_alloc_oom_handler = f;
             return old;
         }
@@ -183,7 +183,7 @@ namespace TinySTL {
         }
 
         obj* volatile* my_free_list = free_list + freelist_index(n);
-        obj* space = *my_free_list;
+        obj* space                  = *my_free_list;
         if (space == nullptr) {
             // No available free list.
             void* r = refill(Round_Up(n));
@@ -203,9 +203,9 @@ namespace TinySTL {
         }
 
         obj* volatile* my_free_list = free_list + freelist_index(n);
-        obj* q = (obj*)ptr;
-        q->next = *my_free_list;
-        *my_free_list = q;
+        obj* q                      = (obj*)ptr;
+        q->next                     = *my_free_list;
+        *my_free_list               = q;
     }
 
     template <bool threads, int inst>
@@ -221,7 +221,7 @@ namespace TinySTL {
         }
 
         // If the size is different, allocate a new space and copy the data.
-        void* result = allocate(new_size);
+        void* result     = allocate(new_size);
         size_t copy_size = new_size > old_size ? old_size : new_size;
         memcpy(result, ptr, copy_size);
         deallocate(ptr, old_size);
@@ -241,12 +241,12 @@ namespace TinySTL {
 
         // Build free list in chunk.
         obj* next_obj;
-        obj* space = (obj*)chunk;
+        obj* space                  = (obj*)chunk;
         obj* volatile* my_free_list = free_list + freelist_index(n);
         *my_free_list = next_obj = (obj*)(chunk + n);
         for (int i = 1;; i++) {
             obj* current_obj = next_obj;
-            next_obj = (obj*)((char*)next_obj + n);
+            next_obj         = (obj*)((char*)next_obj + n);
             if (nobjs - 1 == i) {
                 current_obj->next = 0;
                 break;
@@ -261,7 +261,7 @@ namespace TinySTL {
     template <bool threads, int inst>
     char* __default_alloc_template<threads, inst>::chunk_alloc(size_t size, int& nobjs) {
         size_t total_bytes = size * nobjs;
-        size_t bytes_left = end_free - start_free;
+        size_t bytes_left  = end_free - start_free;
 
         // If enough for all.
         if (bytes_left >= total_bytes) {
@@ -271,8 +271,8 @@ namespace TinySTL {
         }
         // If not enough for all but at least one.
         else if (bytes_left >= size) {
-            nobjs = bytes_left / size;
-            total_bytes = size * nobjs;
+            nobjs        = bytes_left / size;
+            total_bytes  = size * nobjs;
             char* result = start_free;
             start_free += total_bytes;
             return result;
@@ -284,8 +284,8 @@ namespace TinySTL {
             if (bytes_left > 0) {
                 // Search for free list.
                 obj* volatile* my_free_list = free_list + freelist_index(bytes_left);
-                ((obj*)start_free)->next = *my_free_list;
-                *my_free_list = (obj*)start_free;
+                ((obj*)start_free)->next    = *my_free_list;
+                *my_free_list               = (obj*)start_free;
             }
 
             // Config heap space for memory pool.
@@ -296,12 +296,12 @@ namespace TinySTL {
                 // Search for unused and big enough free list.
                 for (int i = size; i <= _MAX_BYTES; i += _ALIGN) {
                     my_free_list = free_list + freelist_index(i);
-                    p = *my_free_list;
+                    p            = *my_free_list;
                     if (p != NULL) {
                         // Adjust free list.
                         *my_free_list = p->next;
-                        start_free = (char*)p;
-                        end_free = start_free + i;
+                        start_free    = (char*)p;
+                        end_free      = start_free + i;
                         // Adjust nobjs.
                         return chunk_alloc(size, nobjs);
                     }

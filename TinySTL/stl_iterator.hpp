@@ -13,15 +13,13 @@ namespace TinySTL {
     struct bidirectional_iterator_tag : public forward_iterator_tag {};
     struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
-    // clang-format off
     // In the case that we lost something.
     template <
         typename Category,
         typename T,
-        typename Distance = ptrdiff_t,
-        typename Pointer = T*,
-        typename Reference = T&
-    >
+        typename Distance  = ptrdiff_t,
+        typename Pointer   = T*,
+        typename Reference = T&>
     struct iterator {
         using iterator_category = Category;
         using value_type        = T;
@@ -86,7 +84,6 @@ namespace TinySTL {
         using pointer           = const T*;
         using reference         = const T&;
     };
-    // clang-format on
 
     // Determine iterator category.
     template <typename I>
@@ -97,7 +94,7 @@ namespace TinySTL {
 
     // Determine iterator distance type.
     template <typename I>
-    constexpr typename iterator_traits<I>::difference_type* __difference_type(const I&) {
+    constexpr typename iterator_traits<I>::difference_type* __distance_type(const I&) {
         return static_cast<typename iterator_traits<I>::difference_type*>(0);
     }
 
@@ -115,8 +112,8 @@ namespace TinySTL {
 
     // Determine iterator distance type.
     template <typename I>
-    constexpr typename iterator_traits<I>::difference_type* difference_type(const I& it) {
-        return __difference_type(it);
+    constexpr typename iterator_traits<I>::difference_type* distance_type(const I& it) {
+        return __distance_type(it);
     }
 
     // Determine iterator value type.

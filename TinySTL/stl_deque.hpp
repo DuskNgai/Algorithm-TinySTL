@@ -19,7 +19,6 @@ namespace TinySTL {
             return deque_buffer_size(BufSize, sizeof(T));
         }
 
-        // clang-format off
         using iterator       = deque_iterator<T, T&, T*, BufSize>;
         using const_iterator = deque_iterator<T, const T&, const T*, BufSize>;
 
@@ -30,9 +29,8 @@ namespace TinySTL {
         using size_type         = size_t;
         using difference_type   = ptrdiff_t;
 
-        using map_pointer       = T**;
-        using self              = deque_iterator<T, Ref, Ptr, BufSize>;
-        // clang-format on
+        using map_pointer = T**;
+        using self        = deque_iterator<T, Ref, Ptr, BufSize>;
 
         // Current buffer, current position.
         pointer m_curr;
@@ -55,13 +53,13 @@ namespace TinySTL {
 
         difference_type operator-(const self& other) const {
             return difference_type(buffer_size()) * (m_node - other.m_node - 1) +
-                (m_curr - m_first) + (other.m_last - other.m_curr);
+                   (m_curr - m_first) + (other.m_last - other.m_curr);
         }
 
         void set_node(map_pointer new_node) {
             m_first = *new_node;
-            m_last = *new_node + difference_type(buffer_size());
-            m_node = new_node;
+            m_last  = *new_node + difference_type(buffer_size());
+            m_node  = new_node;
         }
 
         deque_iterator& operator++() {
@@ -147,24 +145,23 @@ namespace TinySTL {
     };
 
     template <typename T, typename Ref, typename Ptr, size_t BufSize>
-    constexpr random_access_iterator_tag iterator_tag(const deque_iterator<T, Ref, Ptr, BufSize>&) {
-        return random_access_iterator_tag();
+    constexpr ptrdiff_t* distance_type(const deque_iterator<T, Ref, Ptr, BufSize>&) {
+        return static_cast<ptrdiff_t*>(0);
     }
 
     template <typename T, typename Ref, typename Ptr, size_t BufSize>
     constexpr T* value_type(const deque_iterator<T, Ref, Ptr, BufSize>&) {
-        return 0;
+        return static_cast<T*>(0);
     }
 
     template <typename T, typename Ref, typename Ptr, size_t BufSize>
-    constexpr ptrdiff_t* difference_type(const deque_iterator<T, Ref, Ptr, BufSize>&) {
-        return 0;
+    constexpr random_access_iterator_tag iterator_tag(const deque_iterator<T, Ref, Ptr, BufSize>&) {
+        return random_access_iterator_tag();
     }
 
     template <typename T, typename Alloc = alloc, size_t BufSize = 0>
     class deque {
     public:
-        // clang-format off
         using value_type      = T;
         using pointer         = T*;
         using reference       = T&;
@@ -180,7 +177,6 @@ namespace TinySTL {
         using node_allocator = simple_alloc<T, Alloc>;
         using map_allocator  = simple_alloc<T*, Alloc>;
         using map_pointer    = pointer*;
-        // clang-format on
 
         iterator m_start;
         iterator m_finish;
@@ -216,12 +212,12 @@ namespace TinySTL {
             else {
                 // Allocate a new map.
                 size_type new_map_size = m_map_size + std::max(m_map_size, node_to_add) + 2;
-                map_pointer new_map = allocate_map(new_map_size);
-                new_start_node = new_map + (new_map_size - new_num_nodes) / 2 + (add_at_front ? node_to_add : 0);
+                map_pointer new_map    = allocate_map(new_map_size);
+                new_start_node         = new_map + (new_map_size - new_num_nodes) / 2 + (add_at_front ? node_to_add : 0);
                 // Copy [`m_start.m_first`, `m_finish.m_last`) to [`new_start_node.m_first`, `new_start_node + old_num_nodes.m_last`).
                 copy(m_start.m_node, m_finish.m_node + 1, new_start_node);
                 deallocate_map(m_map, m_map_size);
-                m_map = new_map;
+                m_map      = new_map;
                 m_map_size = new_map_size;
             }
 
@@ -232,10 +228,10 @@ namespace TinySTL {
         void initialize_map(size_type num_elements) {
             // First allocate a map.
             size_type num_nodes = num_elements / deque_buffer_size(BufSize, sizeof(T)) + 1;
-            m_map_size = std::max((size_type)(MapSize::MAP_SIZE), num_nodes + 2);
-            m_map = allocate_map(m_map_size);
+            m_map_size          = std::max((size_type)(MapSize::MAP_SIZE), num_nodes + 2);
+            m_map               = allocate_map(m_map_size);
 
-            map_pointer start_node = m_map + (m_map_size - num_nodes) / 2;
+            map_pointer start_node  = m_map + (m_map_size - num_nodes) / 2;
             map_pointer finish_node = start_node + num_nodes;
 
             try {
@@ -243,7 +239,7 @@ namespace TinySTL {
             }
             catch (const std::exception&) {
                 deallocate_map(m_map, m_map_size);
-                m_map = nullptr;
+                m_map      = nullptr;
                 m_map_size = 0;
                 throw;
             }
@@ -517,8 +513,9 @@ namespace TinySTL {
             // If in the second half.
             else {
                 const difference_type element_after = m_finish - pos;
-                iterator new_finish = reserve_element_at_back(n);
-                iterator old_finish = m_finish;
+                iterator new_finish                 = reserve_element_at_back(n);
+                iterator old_finish                 = m_finish;
+
                 pos = old_finish - element_after;
                 try {
                     if (element_after <= difference_type(n)) {
@@ -581,8 +578,8 @@ namespace TinySTL {
             }
             else {
                 const difference_type element_after = m_finish - pos;
-                iterator new_finish = reserve_element_at_back(n);
-                iterator old_finish = m_finish;
+                iterator new_finish                 = reserve_element_at_back(n);
+                iterator old_finish                 = m_finish;
                 try {
                     if (element_after <= difference_type(n)) {
                         // Copy [`pos`, `old_finish`) to [`pos + n`, `new_finish`).
@@ -638,8 +635,9 @@ namespace TinySTL {
             }
             else {
                 const difference_type element_after = m_finish - pos;
-                iterator new_finish = reserve_element_at_back(n);
-                iterator old_finish = m_finish;
+                iterator new_finish                 = reserve_element_at_back(n);
+                iterator old_finish                 = m_finish;
+
                 pos = old_finish - element_after;
                 try {
                     if (element_after <= difference_type(n)) {
@@ -910,7 +908,7 @@ namespace TinySTL {
                 return m_finish;
             }
 
-            difference_type n = last - first;
+            difference_type n     = last - first;
             difference_type index = first - m_start;
             if (index < (difference_type)((size() - n) / 2)) {
                 // Move [`m_start`, `first`) to [`m_start + n`, `last`).
@@ -962,10 +960,10 @@ namespace TinySTL {
         }
 
         void swap(deque& other) {
-            std::swap(m_start, other.m_start);
-            std::swap(m_finish, other.m_finish);
-            std::swap(m_map, other.m_map);
-            std::swap(m_map_size, other.m_map_size);
+            TinySTL::swap(m_start, other.m_start);
+            TinySTL::swap(m_finish, other.m_finish);
+            TinySTL::swap(m_map, other.m_map);
+            TinySTL::swap(m_map_size, other.m_map_size);
         }
 
         bool operator==(const deque& other) const {

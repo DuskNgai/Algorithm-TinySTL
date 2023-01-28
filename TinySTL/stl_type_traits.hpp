@@ -6,12 +6,10 @@ namespace TinySTL {
     struct __true_type {};
     struct __false_type {};
 
-    // clang-format off
-
     template <typename T>
     struct __type_traits {
         // If there are another class named `__type_traits`, then the next line will tell the difference between them.
-        using this_dummy_member_must_be_first = __true_type ;
+        using this_dummy_member_must_be_first = __true_type;
 
         // It will make specialized class for every data type.
         using has_trivial_default_constructor = __false_type;
@@ -182,8 +180,6 @@ namespace TinySTL {
         using has_trivial_destructor          = __true_type;
         using is_POD_type                     = __true_type;
     };
-
-    // clang-format on
 
 }; // namespace TinySTL
 

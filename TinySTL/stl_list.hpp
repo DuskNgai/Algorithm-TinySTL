@@ -20,7 +20,6 @@ namespace TinySTL {
 
     template <typename T, typename Ref, typename Ptr>
     struct list_iterator {
-        // clang-format off
         using iterator       = list_iterator<T, T&, T*>;
         using const_iterator = list_iterator<T, const T&, const T*>;
         using self           = list_iterator<T, Ref, Ptr>;
@@ -32,8 +31,7 @@ namespace TinySTL {
         using size_type         = size_t;
         using difference_type   = ptrdiff_t;
 
-        using node = list_node<T> ;
-        // clang-format on
+        using node = list_node<T>;
 
     public:
         node* m_inner;
@@ -67,6 +65,21 @@ namespace TinySTL {
             return temp;
         }
     };
+
+    template <typename T, typename Ref, typename Ptr>
+    constexpr ptrdiff_t* distance_type(const list_iterator<T, Ref, Ptr>&) {
+        return static_cast<ptrdiff_t*>(0);
+    }
+
+    template <typename T, typename Ref, typename Ptr>
+    constexpr T* value_type(const list_iterator<T, Ref, Ptr>&) {
+        return static_cast<T*>(0);
+    }
+
+    template <typename T, typename Ref, typename Ptr>
+    constexpr bidirectional_iterator_tag iterator_category(const list_iterator<T, Ref, Ptr>&) {
+        return bidirectional_iterator_tag();
+    }
 
     template <typename T, typename Alloc = alloc>
     class list {
@@ -106,7 +119,7 @@ namespace TinySTL {
         }
 
         void init() {
-            m_sentinel = get_node();
+            m_sentinel       = get_node();
             m_sentinel->next = m_sentinel;
             m_sentinel->prev = m_sentinel;
         }
@@ -142,10 +155,10 @@ namespace TinySTL {
         list& operator=(const list& other) {
             if (this != &other) {
                 // Copy the same length part.
-                iterator first1 = begin();
-                iterator last1 = end();
+                iterator first1       = begin();
+                iterator last1        = end();
                 const_iterator first2 = other.begin();
-                const_iterator last2 = other.end();
+                const_iterator last2  = other.end();
                 while (first1 != last1 && first2 != last2) {
                     *first1++ = *first2++;
                 }
@@ -204,11 +217,11 @@ namespace TinySTL {
         }
 
         iterator insert(iterator pos, const T& value = value_type()) {
-            node* temp = create_node(value);
-            temp->next = pos.m_inner;
-            temp->prev = pos.m_inner->prev;
+            node* temp              = create_node(value);
+            temp->next              = pos.m_inner;
+            temp->prev              = pos.m_inner->prev;
             pos.m_inner->prev->next = temp;
-            pos.m_inner->prev = temp;
+            pos.m_inner->prev       = temp;
             return iterator(temp);
         }
 
@@ -256,7 +269,7 @@ namespace TinySTL {
         }
 
         void resize(size_type new_size, const T& value = value_type()) {
-            iterator it = begin();
+            iterator it   = begin();
             size_type len = 0;
             for (; it != end() && len < new_size; ++it, ++len)
                 ;
@@ -274,7 +287,7 @@ namespace TinySTL {
             node* curr = m_sentinel->next;
             while (curr != m_sentinel) {
                 node* temp = curr;
-                curr = curr->next;
+                curr       = curr->next;
                 destory(&(temp->data));
                 put_node(temp);
             }
@@ -283,12 +296,12 @@ namespace TinySTL {
         }
 
         void swap(list& other) {
-            std::swap(m_sentinel, other.m_sentinel);
+            TinySTL::swap(m_sentinel, other.m_sentinel);
         }
 
         void remove(const T& value) {
             iterator first = begin();
-            iterator last = end();
+            iterator last  = end();
             while (first != last) {
                 iterator next = first;
                 ++next;
@@ -301,7 +314,7 @@ namespace TinySTL {
 
         void unique() {
             iterator first = begin();
-            iterator last = end();
+            iterator last  = end();
             if (first == last) {
                 return;
             }
@@ -322,14 +335,14 @@ namespace TinySTL {
         void transfer(iterator pos, iterator first, iterator last) {
             if (pos != last) {
                 // Next connection of `pos`.
-                last.m_inner->prev->next = pos.m_inner;
+                last.m_inner->prev->next  = pos.m_inner;
                 first.m_inner->prev->next = last.m_inner;
-                pos.m_inner->prev->next = first.m_inner;
+                pos.m_inner->prev->next   = first.m_inner;
 
                 // Prev connection of `pos`.
-                node* temp = pos.m_inner->prev;
-                pos.m_inner->prev = last.m_inner->prev;
-                last.m_inner->prev = first.m_inner->prev;
+                node* temp          = pos.m_inner->prev;
+                pos.m_inner->prev   = last.m_inner->prev;
+                last.m_inner->prev  = first.m_inner->prev;
                 first.m_inner->prev = temp;
             }
         }
@@ -359,9 +372,9 @@ namespace TinySTL {
         // Merge two sorted list in ascending order.
         void merge(list& other) {
             iterator first1 = begin();
-            iterator last1 = end();
+            iterator last1  = end();
             iterator first2 = other.begin();
-            iterator last2 = other.end();
+            iterator last2  = other.end();
 
             while (first1 != last1 && first2 != last2) {
                 // It may only overload <.
@@ -385,9 +398,9 @@ namespace TinySTL {
         template <typename Compare>
         void merge(list& other, Compare comp) {
             iterator first1 = begin();
-            iterator last1 = end();
+            iterator last1  = end();
             iterator first2 = other.begin();
-            iterator last2 = other.end();
+            iterator last2  = other.end();
 
             while (first1 != last1 && first2 != last2) {
                 if (comp(*first2, *first1)) {

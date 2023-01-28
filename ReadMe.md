@@ -36,6 +36,36 @@ make -j
 ###### End if you are using GCC/Clang #####
 ```
 
+## Ruminations on STL (C++98 Version)
+
+STL 由六大组件（component）组成，分别是：
+
+1. 分配器（allocator）
+
+2. 迭代器（iterator）
+
+3. 容器（container）
+
+4. 算法（algorithm）
+
+5. 仿函数（functor）
+
+6. 接配器（adapter）
+
+各部分组件的关系为：分配器为容器提供分配空间的接口，让容器专注于增删查改的操作上；迭代器为容器和算法提供了统一的接口；仿函数扩展了数据的解释性，扩展了算法的使用范围；接配器为容器、仿函数、迭代器提供了更为直接的接口。
+
+分配器即是内存管理器。内存管理分为两部分：分配空间（allocation）和释放空间（deallocation），构造（construction）和析构（destruction）。分配空间后，需求者获得指向系统分配空间的指针，系统所分配的空间此时没有初始化。如果所需数据类型属于 C++ 基本数据类型，（进一步说，POD 数据类型），那么我们便可以直接复制所需数据，免去了构造的一步。同理，释放空间的时候我们也可以直接释放空间，免去析构的一步。保留构造和析构的步骤是因为非 POD 数据类型存在构造和析构函数，需要执行这些操作才能得到合适的数据。将二者分离可以保证较快的运行速度和正确的运行结果。
+
+容器即是常见的数据结构。容器分为序列型（sequential）容器和关联型（associative）容器。序列型容器包括：可变数组（vector）、双向链表（list）单向链表（forward list）、栈（stack）、队列（queue）、双向队列（deque）、堆（heap）、优先队列（priority queue）。关联型容器包括：红黑树（red-black tree）、散列表（hashtable）和由它们实现的集合（set）、映射（map）、多集合（multiset）、多映射（multimap）。这些数据结构囊括了绝大部分的实际需求。
+
+算法即是常见的基本算法。这些算法专门执行在容器之中，拓展了容器的增删查改的能力。这里特别讲述一下 `std::sort` 的写法。`std::sort` 为了保证稳定且快速的排序，结合了 `heap sort`、`intro sort`（`quick sort` 的变种）和 `insertion sort`。首先进行 `intro sort`，从数组头部、中间和尾部选取中间值作为 `pivot`。用分割算法把小于 `pivot` 的元素放到其左侧，大于的放在其右侧，然后递归右半部分。每次分割时候如果子数组长度小于某阈值时，则不继续分割了。这样，数组便被分割为一段一段的子数组，子数组长度不超过阈值，且在数组前部的子数组的元素不大于在数组后部的子数组的元素。这样 `insertion sort` 便可以分段排序，每一段排序绝不影响前一段排序。利用小数组的 `insertion sort` 更快的特性，`std::sort` 要比单纯 `intro sort` 更快。至于 `heap sort`，由于其稳定的 `O(nlogn)` 的时间复杂度，是用于 `intro sort` 分割次数过多时候的稳定排序时间手段。
+
+迭代器是容器和算法之间的桥梁。由于容器的内存排布存在各种形式，为了适配，算法可能会重载多个针对不同内存排布的容器的函数。这些函数如何知道容器的内存排布，就需要从迭代器中萃取出来。
+
+仿函数又称为函数对象。它是一个重载了 `operator()` 的结构体，可以像函数一样调用。仿函数的存在是因为类的可拓展性能。我们很容易地就可以从类的实例中获取函数参数和返回值的信息，而函数指针在 C++98 标准内不能做到这一点。
+
+接配器是对容器、迭代器和仿函数的拓展。不过自从 `C++11` 之后，仿函数接配器就换了一个新的形式出现，与 `auto`、lambda 函数、 `std::function` 和 `std::bind` 等新特性一起使用。
+
 ## TODO List
 
 ### Introduction to Algorithm
@@ -54,8 +84,8 @@ make -j
 - [ ] Part 3 Data Structure
     - [ ] Chapter 10 Elementary Data Structures
     - [ ] Chapter 11 Hash Tables
-    - [ ] Chapter 12 Binary Search Trees
-    - [ ] Chapter 13 Red-Black Trees
+    - [x] Chapter 12 Binary Search Trees
+    - [x] Chapter 13 Red-Black Trees
 - [ ] Part 4 Advanced Design and Analysis Techniques
     - [ ] Chapter 14 Dynamic Programming
     - [ ] Chapter 15 Greedy Algorithms
@@ -102,8 +132,8 @@ make -j
     - [ ] Associative Containers
         - [ ] Tree (`stl_tree.hpp`)
         - [x] Pair (`stl_pair.hpp`)
-        - [ ] Set (`stl_set.hpp`)
-        - [ ] Map (`stl_map.hpp`)
+        - [x] Set (`stl_set.hpp`)
+        - [x] Map (`stl_map.hpp`)
         - [ ] Multiset (`stl_multiset.hpp`)
         - [ ] Multimap (`stl_multimap.hpp`)
         - [ ] Hash Table (`stl_hash_table.hpp`)

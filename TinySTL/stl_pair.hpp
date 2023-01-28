@@ -5,10 +5,8 @@ namespace TinySTL {
 
     template <typename T1, typename T2>
     struct pair {
-        // clang-format off
         using first_type  = T1;
         using second_type = T2;
-        // clang-format on
 
         T1 first;
         T2 second;
@@ -17,8 +15,8 @@ namespace TinySTL {
             : first(T1()), second(T2()) {}
         pair(const T1& t1, const T2& t2)
             : first(t1), second(t2) {}
-        pair(T1&& t1, T2 && t2) noexcept
-            : first(t1), second(t2) {}
+        pair(T1&& t1, T2&& t2) noexcept
+            : first(std::move(t1)), second(std::move(t2)) {}
         ~pair() = default;
     };
 

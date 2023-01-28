@@ -99,7 +99,7 @@ def TreeMaximum(x):
 def TreeSuccessor(x):
     if x.right is not None:
         return TreeMinimum(x.right) # leftmost node in right subtree
-    else: # find the lowest ancestor of x whose left child is an ancestor of x
+    else: # find the lowest ancestor of `x` whose left child is an ancestor of `x`
         y = x.parent
         while y is not None and x == y.right:
             x, y = y, y.parent
@@ -128,6 +128,21 @@ def TreeMaximum(x):
     if x.right is not None:
         return TreeMinimum(x.right)
     return x
+```
+
+#### 12.2-3
+
+> Write the `TREE-PREDECESSOR` procedure.
+
+```python
+def TreePredecessor(x):
+    if x.left is not None:
+        return TreeMaximum(x.left) # rightmost node in left subtree
+    else: # find the lowest ancestor of `x` whose right child is an ancestor of `x`
+        y = x.parent
+        while y is not None and x == y.left:
+            x, y = y, y.parent
+        return y
 ```
 
 ## 12.3 Insertion and deletion

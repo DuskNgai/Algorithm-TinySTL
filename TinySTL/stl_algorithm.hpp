@@ -117,7 +117,7 @@ namespace TinySTL {
     // RandomAccessIterator version
     template <typename RandomAccessIterator, typename OutputIterator>
     inline OutputIterator __copy(RandomAccessIterator first, RandomAccessIterator last, OutputIterator result, random_access_iterator_tag) {
-        return __copy_d(first, last, result, difference_type(first));
+        return __copy_d(first, last, result, distance_type(first));
     }
 
     // Dispatch based on the iterator category.
@@ -197,7 +197,7 @@ namespace TinySTL {
     template <typename InputIterator, typename OutputIterator>
     struct __copy_backward_dispatch {
         OutputIterator operator()(InputIterator first, InputIterator last, OutputIterator result) {
-            return __copy_backward(first, last, result, iterator_category(first), difference_type(first));
+            return __copy_backward(first, last, result, iterator_category(first), distance_type(first));
         }
     };
 
@@ -211,7 +211,7 @@ namespace TinySTL {
 
     template <typename T>
     T* __copy_backward_trivial(const T* first, const T* last, T* result, __false_type) {
-        return __copy_backward(first, last, result, iterator_category(first), difference_type(first));
+        return __copy_backward(first, last, result, iterator_category(first), distance_type(first));
     }
 
     template <typename T>
@@ -241,8 +241,8 @@ namespace TinySTL {
     template <typename T>
     constexpr void swap(T& a, T& b) {
         T temp = a;
-        a = b;
-        b = temp;
+        a      = b;
+        b      = temp;
     }
 
     //! O(1)
@@ -250,8 +250,8 @@ namespace TinySTL {
     template <typename ForwardIterator1, typename ForwardIterator2>
     inline void iter_swap(ForwardIterator1 first, ForwardIterator2 second) {
         auto temp = *first;
-        *first = *second;
-        *second = temp;
+        *first    = *second;
+        *second   = temp;
     }
 
     //! O(n)
@@ -362,7 +362,7 @@ namespace TinySTL {
     bool lexicographical_compare(const unsigned char* first1, const unsigned char* last1, const unsigned char* first2, const unsigned char* last2) {
         const size_t len1 = last1 - first1;
         const size_t len2 = last2 - first2;
-        const int result = memcmp(first1, first2, TinySTL::min(len1, len2));
+        const int result  = memcmp(first1, first2, TinySTL::min(len1, len2));
         return (result != 0) ? (result < 0) : (len1 < len2);
     }
 
@@ -422,7 +422,7 @@ namespace TinySTL {
     int lexicographical_compare_3way(const unsigned char* first1, const unsigned char* last1, const unsigned char* first2, const unsigned char* last2) {
         const ptrdiff_t len1 = last1 - first1;
         const ptrdiff_t len2 = last2 - first2;
-        const int result = memcmp(first1, first2, TinySTL::min(len1, len2));
+        const int result     = memcmp(first1, first2, TinySTL::min(len1, len2));
         return (result != 0) ? result : ((len1 == len2) ? 0 : (len1 < len2 ? -1 : 1));
     }
 
@@ -1013,7 +1013,7 @@ namespace TinySTL {
             first = TinySTL::find(first, last, value);
             while (first != last) {
                 // Match the rest.
-                Integer n = count - 1;
+                Integer n         = count - 1;
                 ForwardIterator i = first;
                 ++i;
                 while (i != last && n != 0 && *i == value) {
@@ -1046,7 +1046,7 @@ namespace TinySTL {
             }
             while (first != last) {
                 // Match the rest.
-                Integer n = count - 1;
+                Integer n         = count - 1;
                 ForwardIterator i = first;
                 ++i;
                 while (i != last && n != 0 && op(*i, value)) {
@@ -1211,7 +1211,7 @@ namespace TinySTL {
         Distance len = TinySTL::distance(first, last);
 
         while (len > 0) {
-            Distance half = len >> 1;
+            Distance half          = len >> 1;
             ForwardIterator middle = first;
             TinySTL::advance(middle, half);
             if (*middle < value) {
@@ -1230,7 +1230,7 @@ namespace TinySTL {
     // A way of binary search, return the first position that no less than the value.
     template <typename ForwardIterator, typename T>
     inline ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last, const T& value) {
-        return __lower_bound(first, last, value, difference_type(first));
+        return __lower_bound(first, last, value, distance_type(first));
     }
 
     //! O(logn)
@@ -1239,7 +1239,7 @@ namespace TinySTL {
         Distance len = distance(first, last);
 
         while (len > 0) {
-            Distance half = len >> 1;
+            Distance half          = len >> 1;
             ForwardIterator middle = first;
             TinySTL::advance(middle, half);
             if (comp(*middle, value)) {
@@ -1257,7 +1257,7 @@ namespace TinySTL {
     //! O(logn)
     template <typename ForwardIterator, typename T, typename Compare>
     inline ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last, const T& value, Compare comp) {
-        return __lower_bound(first, last, value, difference_type(first), comp);
+        return __lower_bound(first, last, value, distance_type(first), comp);
     }
 
     //! O(logn)
@@ -1266,7 +1266,7 @@ namespace TinySTL {
         Distance len = TinySTL::distance(first, last);
 
         while (len > 0) {
-            Distance half = len >> 1;
+            Distance half          = len >> 1;
             ForwardIterator middle = first;
             TinySTL::advance(middle, half);
             if (value < *middle) {
@@ -1285,7 +1285,7 @@ namespace TinySTL {
     // A way of binary search, return the first position that bigger than the value.
     template <typename ForwardIterator, typename T>
     inline ForwardIterator upper_bound(ForwardIterator first, ForwardIterator last, const T& value) {
-        return __upper_bound(first, last, value, difference_type(first));
+        return __upper_bound(first, last, value, distance_type(first));
     }
 
     //! O(logn)
@@ -1294,7 +1294,7 @@ namespace TinySTL {
         Distance len = TinySTL::distance(first, last);
 
         while (len > 0) {
-            Distance half = len >> 1;
+            Distance half          = len >> 1;
             ForwardIterator middle = first;
             TinySTL::advance(middle, half);
             if (comp(value, *middle)) {
@@ -1312,7 +1312,7 @@ namespace TinySTL {
     //! O(logn)
     template <typename ForwardIterator, typename T, typename Compare>
     inline ForwardIterator upper_bound(ForwardIterator first, ForwardIterator last, const T& value, Compare comp) {
-        return __upper_bound(first, last, value, difference_type(first), comp);
+        return __upper_bound(first, last, value, distance_type(first), comp);
     }
 
     //! O(logn)
@@ -1321,7 +1321,7 @@ namespace TinySTL {
         Distance len = TinySTL::distance(first, last);
 
         while (len > 0) {
-            Distance half = len >> 1;
+            Distance half          = len >> 1;
             ForwardIterator middle = first;
             TinySTL::advance(middle, half);
             if (*middle < value) {
@@ -1346,7 +1346,7 @@ namespace TinySTL {
     // Find the equal range, a.k.a, [lower bound, upper bound).
     template <typename ForwardIterator, typename T>
     inline pair<ForwardIterator, ForwardIterator> equal_range(ForwardIterator first, ForwardIterator last, const T& value) {
-        return __equal_range(first, last, value, difference_type(first));
+        return __equal_range(first, last, value, distance_type(first));
     }
 
     //! O(logn)
@@ -1355,7 +1355,7 @@ namespace TinySTL {
         Distance len = TinySTL::distance(first, last);
 
         while (len > 0) {
-            Distance half = len >> 1;
+            Distance half          = len >> 1;
             ForwardIterator middle = first;
             TinySTL::advance(middle, half);
             if (comp(*middle, value)) {
@@ -1379,7 +1379,7 @@ namespace TinySTL {
     //! O(logn)
     template <typename ForwardIterator, typename T, typename Compare>
     inline pair<ForwardIterator, ForwardIterator> equal_range(ForwardIterator first, ForwardIterator last, const T& value, Compare comp) {
-        return __equal_range(first, last, value, difference_type(first), comp);
+        return __equal_range(first, last, value, distance_type(first), comp);
     }
 
     //! O(logn)
@@ -1474,7 +1474,7 @@ namespace TinySTL {
     // Remove all the elements that not equal to `value`.
     template <typename ForwardIterator, typename T>
     ForwardIterator remove(ForwardIterator first, ForwardIterator last, const T& value) {
-        first = TinySTL::find(first, last, value);
+        first                = TinySTL::find(first, last, value);
         ForwardIterator next = first;
         return first == last ? first : TinySTL::remove_copy(++next, last, first, value);
     }
@@ -1483,7 +1483,7 @@ namespace TinySTL {
     // Remove all the elements that not satisfy the `Predicate`.
     template <typename ForwardIterator, typename Predicate>
     ForwardIterator remove_if(ForwardIterator first, ForwardIterator last, Predicate pred) {
-        first = TinySTL::find_if(first, last, pred);
+        first                = TinySTL::find_if(first, last, pred);
         ForwardIterator next = first;
         return first == last ? first : TinySTL::remove_copy_if(++next, last, first, pred);
     }
@@ -1506,10 +1506,10 @@ namespace TinySTL {
     template <typename InputIterator, typename OutputIterator>
     OutputIterator __unique_copy(InputIterator first, InputIterator last, OutputIterator result, output_iterator_tag) {
         auto value = *first;
-        *result = value;
+        *result    = value;
         while (++first != last) {
             if (value != *first) {
-                value = *first;
+                value     = *first;
                 *++result = value;
             }
         }
@@ -1544,10 +1544,10 @@ namespace TinySTL {
     template <typename InputIterator, typename OutputIterator, typename BinaryOperator>
     OutputIterator __unique_copy(InputIterator first, InputIterator last, OutputIterator result, output_iterator_tag, BinaryOperator op) {
         auto value = *first;
-        *result = value;
+        *result    = value;
         while (++first != last) {
             if (!op(value, *first)) {
-                value = *first;
+                value     = *first;
                 *++result = value;
             }
         }
@@ -1587,8 +1587,8 @@ namespace TinySTL {
     EuclideanRingElement __gcd(EuclideanRingElement m, EuclideanRingElement n) {
         while (n != 0) {
             EuclideanRingElement t = m % n;
-            m = n;
-            n = t;
+            m                      = n;
+            n                      = t;
         }
         return m;
     }
@@ -1606,12 +1606,13 @@ namespace TinySTL {
         } while (first2 != last);
 
         ForwardIterator new_middle = first;
-        first2 = middle;
+        first2                     = middle;
         while (first2 != last) {
             TinySTL::swap(*first++, *first2++);
             if (first == middle) {
                 middle = first2;
-            } else if (first2 == last) {
+            }
+            else if (first2 == last) {
                 first2 = middle;
             }
         }
@@ -1632,7 +1633,8 @@ namespace TinySTL {
         if (first == middle) {
             TinySTL::__reverse(middle, last, bidirectional_iterator_tag());
             return last;
-        } else {
+        }
+        else {
             TinySTL::__reverse(first, middle, bidirectional_iterator_tag());
             return first;
         }
@@ -1645,6 +1647,7 @@ namespace TinySTL {
         Distance n = last - first;
         Distance k = middle - first;
         Distance l = n - k;
+
         RandomAccessIterator new_middle = first + l;
 
         if (k == l) {
@@ -1654,7 +1657,7 @@ namespace TinySTL {
 
         Distance d = TinySTL::__gcd(n, k);
         for (Distance i = 0; i < d; ++i) {
-            auto tmp = *first;
+            auto tmp               = *first;
             RandomAccessIterator p = first;
             if (k < l) {
                 for (Distance j = 0; j < l / d; ++j) {
@@ -1665,7 +1668,8 @@ namespace TinySTL {
                     *p = *(p + k);
                     p += k;
                 }
-            } else {
+            }
+            else {
                 for (Distance j = 0; j < k / d - 1; ++j) {
                     if (p < (last - k)) {
                         *p = *(p + k);
@@ -1691,7 +1695,7 @@ namespace TinySTL {
         if (last == middle) {
             return first;
         }
-        return __rotate(first, middle, last, difference_type(first), iterator_category(first));
+        return __rotate(first, middle, last, distance_type(first), iterator_category(first));
     }
 
     //! O(n)
@@ -1714,7 +1718,7 @@ namespace TinySTL {
             // For the rest elements, if bigger than top, then it is too large.
             if (*i < *first) {
                 // Adjust the heap by inserting the new element into the heap.
-                __pop_heap(first, middle, i, difference_type(first), T(*i));
+                __pop_heap(first, middle, i, distance_type(first), T(*i));
             }
         }
         // Heap sort in ascending order.
@@ -1727,7 +1731,7 @@ namespace TinySTL {
         TinySTL::make_heap(first, middle, comp);
         for (RandomAccessIterator i = middle; i < last; ++i) {
             if (comp(*i, *first)) {
-                __pop_heap(first, middle, i, difference_type(first), T(*i), comp);
+                __pop_heap(first, middle, i, distance_type(first), T(*i), comp);
             }
         }
         TinySTL::sort_heap(first, middle, comp);
@@ -1774,7 +1778,7 @@ namespace TinySTL {
     // Same as partial_sort, but output to [`result_first`, `result_last`).
     template <typename InputIterator, typename RandomAccessIterator>
     inline RandomAccessIterator partial_sort_copy(InputIterator first, InputIterator last, RandomAccessIterator result_first, RandomAccessIterator result_last) {
-        return __partial_sort_copy(first, last, result_first, result_last, difference_type(result_first), value_type(first));
+        return __partial_sort_copy(first, last, result_first, result_last, distance_type(result_first), value_type(first));
     }
 
     //! O(nlogm)
@@ -1803,7 +1807,7 @@ namespace TinySTL {
     //! O(nlogm)
     template <typename InputIterator, typename RandomAccessIterator, typename Compare>
     inline RandomAccessIterator partial_sort_copy(InputIterator first, InputIterator last, RandomAccessIterator result_first, RandomAccessIterator result_last, Compare comp) {
-        return __partial_sort_copy(first, last, result_first, result_last, difference_type(result_first), value_type(first), comp);
+        return __partial_sort_copy(first, last, result_first, result_last, distance_type(result_first), value_type(first), comp);
     }
 
     //! O(n)
@@ -1950,7 +1954,7 @@ namespace TinySTL {
         --next;
         while (value < *next) {
             *last = *next;
-            last = next;
+            last  = next;
             --next;
         }
         *last = value;
@@ -1963,7 +1967,7 @@ namespace TinySTL {
         --next;
         while (comp(value, *next)) {
             *last = *next;
-            last = next;
+            last  = next;
             --next;
         }
         *last = value;
@@ -2208,22 +2212,22 @@ namespace TinySTL {
             }
             return;
         }
-        BidirectionalIterator first_cut = first;
+        BidirectionalIterator first_cut  = first;
         BidirectionalIterator second_cut = middle;
-        Distance len11 = 0;
-        Distance len22 = 0;
+        Distance len11                   = 0;
+        Distance len22                   = 0;
         // Binary search for the position of `new_middle` in the other half since they are sorted ranges.
         if (len1 > len2) {
             len11 = len1 / 2;
             TinySTL::advance(first_cut, len11);
             second_cut = TinySTL::lower_bound(middle, last, *first_cut);
-            len22 = TinySTL::distance(middle, second_cut);
+            len22      = TinySTL::distance(middle, second_cut);
         }
         else {
             len22 = len2 / 2;
             TinySTL::advance(second_cut, len22);
             first_cut = TinySTL::upper_bound(first, middle, *second_cut);
-            len11 = TinySTL::distance(first, first_cut);
+            len11     = TinySTL::distance(first, first_cut);
         }
         // Rotate the smaller element to the front.
         BidirectionalIterator new_middle = TinySTL::rotate(first_cut, middle, second_cut);
@@ -2243,21 +2247,21 @@ namespace TinySTL {
             }
             return;
         }
-        BidirectionalIterator first_cut = first;
+        BidirectionalIterator first_cut  = first;
         BidirectionalIterator second_cut = middle;
-        Distance len11 = 0;
-        Distance len22 = 0;
+        Distance len11                   = 0;
+        Distance len22                   = 0;
         if (len1 > len2) {
             len11 = len1 / 2;
             TinySTL::advance(first_cut, len11);
             second_cut = TinySTL::lower_bound(middle, last, *first_cut, comp);
-            len22 = TinySTL::distance(middle, second_cut);
+            len22      = TinySTL::distance(middle, second_cut);
         }
         else {
             len22 = len2 / 2;
             TinySTL::advance(second_cut, len22);
             first_cut = TinySTL::upper_bound(first, middle, *second_cut, comp);
-            len11 = TinySTL::distance(first, first_cut);
+            len11     = TinySTL::distance(first, first_cut);
         }
         BidirectionalIterator new_middle = TinySTL::rotate(first_cut, middle, second_cut);
         __merge_without_buffer(first, first_cut, new_middle, len11, len22, comp);

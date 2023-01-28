@@ -12,7 +12,6 @@ namespace TinySTL {
     template <typename T>
     class allocator {
     public:
-        // clang-format off
         using value_type      = T;
         using pointer         = T*;
         using const_pointer   = const T*;
@@ -20,7 +19,6 @@ namespace TinySTL {
         using const_reference = const T&;
         using size_type       = size_t;
         using difference_type = ptrdiff_t;
-        // clang-format on
 
         // Rebind allocator of type U.
         template <typename U>

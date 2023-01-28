@@ -79,6 +79,6 @@ namespace TinySTL {
         size_t operator()(unsigned long long x) const { return x; }
     };
 
-}
+} // namespace TinySTL
 
 #endif // !_TINYSTL_HASH_FUN_HPP_

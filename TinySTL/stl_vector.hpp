@@ -12,7 +12,6 @@ namespace TinySTL {
     template <typename T, typename Alloc = allocator<T>>
     class vector {
     public:
-        // clang-format off
         using value_type       = T;
         using pointer          = T*;
         using iterator         = T*;
@@ -23,7 +22,6 @@ namespace TinySTL {
         using const_iterator   = const T*;
         using const_reference  = const T&;
         using vector_allocator = simple_alloc<T, Alloc>;
-        // clang-format on
 
     protected:
         // m_start position of used
@@ -52,8 +50,8 @@ namespace TinySTL {
                 // Allocate new space.
                 const size_type old_capacity = capacity();
                 const size_type new_capacity = old_capacity != 0 ? 2 * old_capacity : 1;
-                iterator new_start = vector_allocator::allocate(new_capacity);
-                iterator new_finish = new_start;
+                iterator new_start           = vector_allocator::allocate(new_capacity);
+                iterator new_finish          = new_start;
                 try {
                     // Copy old [`m_start`, `pos`) to [`new_start`, `pos`).
                     new_finish = TinySTL::uninitialized_copy(m_start, pos, new_start);
@@ -74,8 +72,8 @@ namespace TinySTL {
                 destory(begin(), end());
                 vector_allocator::deallocate(m_start, old_capacity);
                 // Update the iterator.
-                m_start = new_start;
-                m_finish = new_finish;
+                m_start          = new_start;
+                m_finish         = new_finish;
                 m_end_of_storage = new_start + new_capacity;
             }
         }
@@ -98,8 +96,8 @@ namespace TinySTL {
                 // Allocate new space.
                 const size_type old_capacity = capacity();
                 const size_type new_capacity = old_capacity != 0 ? 2 * old_capacity : 1;
-                iterator new_start = vector_allocator::allocate(new_capacity);
-                iterator new_finish = new_start;
+                iterator new_start           = vector_allocator::allocate(new_capacity);
+                iterator new_finish          = new_start;
                 try {
                     // Copy old [`m_start`, `pos`) to [`new_start`, `pos`).
                     new_finish = TinySTL::uninitialized_copy(m_start, pos, new_start);
@@ -120,8 +118,8 @@ namespace TinySTL {
                 destory(begin(), end());
                 vector_allocator::deallocate(m_start, old_capacity);
                 // Update the iterator.
-                m_start = new_start;
-                m_finish = new_finish;
+                m_start          = new_start;
+                m_finish         = new_finish;
                 m_end_of_storage = new_start + new_capacity;
             }
         }
@@ -131,26 +129,26 @@ namespace TinySTL {
             : m_start(nullptr), m_finish(nullptr), m_end_of_storage(nullptr) {}
 
         vector(size_type n, const T& value = value_type()) {
-            m_start = vector_allocator::allocate(n);
-            m_finish = TinySTL::uninitialized_fill_n(begin(), n, value);
+            m_start          = vector_allocator::allocate(n);
+            m_finish         = TinySTL::uninitialized_fill_n(begin(), n, value);
             m_end_of_storage = m_finish;
         }
 
         vector(const vector& other) {
-            m_start = vector_allocator::allocate(other.size());
-            m_finish = TinySTL::uninitialized_copy(other.begin(), other.end(), begin());
+            m_start          = vector_allocator::allocate(other.size());
+            m_finish         = TinySTL::uninitialized_copy(other.begin(), other.end(), begin());
             m_end_of_storage = m_finish;
         }
 
         vector(const value_type* first, const value_type* last) {
-            m_start = vector_allocator::allocate(distance(first, last));
-            m_finish = TinySTL::uninitialized_copy(first, last, begin());
+            m_start          = vector_allocator::allocate(distance(first, last));
+            m_finish         = TinySTL::uninitialized_copy(first, last, begin());
             m_end_of_storage = m_finish;
         }
 
         vector(const iterator first, const iterator last) {
-            m_start = vector_allocator::allocate(distance(first, last));
-            m_finish = TinySTL::uninitialized_copy(first, last, begin());
+            m_start          = vector_allocator::allocate(distance(first, last));
+            m_finish         = TinySTL::uninitialized_copy(first, last, begin());
             m_end_of_storage = m_finish;
         }
 
@@ -160,8 +158,8 @@ namespace TinySTL {
                 destory(begin(), end());
                 vector_allocator::deallocate(begin(), capacity());
                 // Allocate new space.
-                m_start = vector_allocator::allocate(other.size());
-                m_finish = TinySTL::uninitialized_copy(other.begin(), other.end(), begin());
+                m_start          = vector_allocator::allocate(other.size());
+                m_finish         = TinySTL::uninitialized_copy(other.begin(), other.end(), begin());
                 m_end_of_storage = m_finish;
             }
             return *this;
@@ -172,8 +170,8 @@ namespace TinySTL {
             destory(m_start, m_finish);
             vector_allocator::deallocate(m_start, capacity());
             // Reset the iterator.
-            m_start = nullptr;
-            m_finish = nullptr;
+            m_start          = nullptr;
+            m_finish         = nullptr;
             m_end_of_storage = nullptr;
         }
 
@@ -257,7 +255,7 @@ namespace TinySTL {
                 // If there is enough space.
                 if ((size_type)(m_end_of_storage - m_finish) >= n) {
                     const size_type n_elems_after = m_finish - pos;
-                    iterator old_finish = m_finish;
+                    iterator old_finish           = m_finish;
                     // If there are more elements after `pos` than number of inserted values.
                     if (n_elems_after > n) {
                         // Copy [`m_finish - n`, `m_finish`) to [`m_finish`, `m_finish + n`).
@@ -280,11 +278,11 @@ namespace TinySTL {
                 // If there is not enough space.
                 else {
                     // First allocate space.
-                    const size_type old_size = size();
+                    const size_type old_size     = size();
                     const size_type old_capacity = capacity();
                     const size_type new_capacity = old_size + n;
-                    iterator new_start = vector_allocator::allocate(new_capacity);
-                    iterator new_finish = new_start;
+                    iterator new_start           = vector_allocator::allocate(new_capacity);
+                    iterator new_finish          = new_start;
                     try {
                         // Copy old [`m_start`, `pos`) to new space starting from `new_start`.
                         new_finish = TinySTL::uninitialized_copy(m_start, pos, new_start);
@@ -302,8 +300,8 @@ namespace TinySTL {
                     destory(begin(), end());
                     vector_allocator::deallocate(m_start, old_capacity);
                     // Update the iterator.
-                    m_start = new_start;
-                    m_finish = new_finish;
+                    m_start          = new_start;
+                    m_finish         = new_finish;
                     m_end_of_storage = new_start + new_capacity;
                 }
             }
@@ -316,7 +314,7 @@ namespace TinySTL {
                 // If there is enough space.
                 if ((size_type)(m_end_of_storage - m_finish) >= n) {
                     const size_type n_elems_after = m_finish - pos;
-                    iterator old_finish = m_finish;
+                    iterator old_finish           = m_finish;
                     // If there are more elements after `pos` than number of inserted values.
                     if (n_elems_after > n) {
                         // Copy [`m_finish - n`, `m_finish`) to [`m_finish`, `m_finish + n`).
@@ -339,11 +337,11 @@ namespace TinySTL {
                 // If there is not enough space.
                 else {
                     // First allocate space.
-                    const size_type old_size = size();
+                    const size_type old_size     = size();
                     const size_type old_capacity = capacity();
                     const size_type new_capacity = old_size + n;
-                    iterator new_start = vector_allocator::allocate(new_capacity);
-                    iterator new_finish = new_start;
+                    iterator new_start           = vector_allocator::allocate(new_capacity);
+                    iterator new_finish          = new_start;
                     try {
                         // Copy old [`m_start`, `pos`) to new space starting from `new_start`.
                         new_finish = TinySTL::uninitialized_copy(m_start, pos, new_start);
@@ -361,8 +359,8 @@ namespace TinySTL {
                     destory(begin(), end());
                     vector_allocator::deallocate(m_start, old_capacity);
                     // Update the iterator.
-                    m_start = new_start;
-                    m_finish = new_finish;
+                    m_start          = new_start;
+                    m_finish         = new_finish;
                     m_end_of_storage = new_start + new_capacity;
                 }
             }
@@ -401,15 +399,15 @@ namespace TinySTL {
             if (capacity() < n) {
                 // Allocate new space.
                 const size_type old_capacity = capacity();
-                iterator new_start = vector_allocator::allocate(n);
+                iterator new_start           = vector_allocator::allocate(n);
                 // Copy old space to new space.
                 iterator new_finish = uninitialized_copy(begin(), end(), new_start);
                 // Destroy and deallocate old space.
                 destory(m_start, m_finish);
                 vector_allocator::deallocate(m_start, old_capacity);
                 // Update the iterator.
-                m_start = new_start;
-                m_finish = new_finish;
+                m_start          = new_start;
+                m_finish         = new_finish;
                 m_end_of_storage = new_start + n;
             }
         }
@@ -423,16 +421,16 @@ namespace TinySTL {
                 destory(m_start, m_finish);
                 vector_allocator::deallocate(m_start, capacity());
                 // Update the iterator.
-                m_start = new_start;
-                m_finish = new_finish;
+                m_start          = new_start;
+                m_finish         = new_finish;
                 m_end_of_storage = new_finish;
             }
         }
 
         void swap(vector& other) {
-            std::swap(m_start, other.m_start);
-            std::swap(m_finish, other.m_finish);
-            std::swap(m_end_of_storage, other.m_end_of_storage);
+            TinySTL::swap(m_start, other.m_start);
+            TinySTL::swap(m_finish, other.m_finish);
+            TinySTL::swap(m_end_of_storage, other.m_end_of_storage);
         }
 
         bool operator==(const vector& other) {

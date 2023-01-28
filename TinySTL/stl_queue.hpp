@@ -11,13 +11,11 @@ namespace TinySTL {
     template <typename T, typename Container = deque<T>>
     class queue {
     public:
-        // clang-format off
         using value_type      = typename Container::value_type;
         using size_type       = typename Container::size_type;
         using reference       = typename Container::reference;
         using const_reference = typename Container::const_reference;
         using container_type  = Container;
-        // clang-format on
 
     protected:
         Container container;
@@ -47,13 +45,11 @@ namespace TinySTL {
     template <typename T, typename Container = vector<T>, typename Compare = less<typename Container::value_type>>
     class priority_queue {
     public:
-        // clang-format off
         using value_type      = typename Container::value_type;
         using size_type       = typename Container::size_type;
         using reference       = typename Container::reference;
         using const_reference = typename Container::const_reference;
-        using container_type  =          Container;
-        // clang-format on
+        using container_type  = Container;
 
     protected:
         Container container;

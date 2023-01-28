@@ -33,25 +33,27 @@ namespace TinySTL {
 
     inline void forward_list_splice_after(forward_list_node_base* pos, forward_list_node_base* before_first, forward_list_node_base* before_last) {
         if (pos != before_first && pos != before_last) {
-            forward_list_node_base* first = before_first->next;
+            forward_list_node_base* first     = before_first->next;
             forward_list_node_base* after_pos = pos->next;
+
             before_first->next = before_last->next;
-            pos->next = first;
-            before_last->next = after_pos;
+            pos->next          = first;
+            before_last->next  = after_pos;
         }
     }
 
     inline forward_list_node_base* forward_list_reverse(forward_list_node_base* head) {
         forward_list_node_base* curr = head;
-        head = head->next;
-        curr->next = nullptr;
+        head                         = head->next;
+        curr->next                   = nullptr;
 
         // Flip one by one.
         while (head) {
             forward_list_node_base* next = head->next;
+
             head->next = curr;
-            curr = head;
-            head = next;
+            curr       = head;
+            head       = next;
         }
         return curr;
     }
@@ -70,11 +72,9 @@ namespace TinySTL {
     };
 
     struct forward_list_iterator_base {
-        // clang-format off
         using size_type         = size_t;
         using difference_type   = ptrdiff_t;
         using iterator_category = forward_iterator_tag;
-        // clang-format on
 
     public:
         forward_list_node_base* m_inner;
@@ -95,7 +95,6 @@ namespace TinySTL {
 
     template <typename T, typename Ref, typename Ptr>
     struct forward_list_iterator : public forward_list_iterator_base {
-        // clang-format off
         using iterator       = forward_list_iterator<T, T&, T*>;
         using const_iterator = forward_list_iterator<T, const T&, const T*>;
         using self           = forward_list_iterator<T, Ref, Ptr>;
@@ -104,7 +103,6 @@ namespace TinySTL {
         using pointer    = Ptr;
         using reference  = Ref;
         using node       = forward_list_node<T>;
-        // clang-format on
 
         forward_list_iterator(node* inner = nullptr)
             : forward_list_iterator_base(inner) {}
@@ -129,12 +127,12 @@ namespace TinySTL {
     };
 
     constexpr ptrdiff_t* distance_type(const forward_list_iterator_base&) {
-        return 0;
+        return static_cast<ptrdiff_t*>(0);
     }
 
     template <typename T, typename Ref, typename Ptr>
     constexpr T* value_type(const forward_list_iterator<T, Ref, Ptr>&) {
-        return 0;
+        return static_cast<T*>(0);
     }
 
     constexpr forward_iterator_tag iterator_category(const forward_list_iterator_base&) {
@@ -144,7 +142,6 @@ namespace TinySTL {
     template <typename T, typename Alloc = alloc>
     class forward_list {
     public:
-        // clang-format off
         using value_type      = T;
         using pointer         = T*;
         using reference       = T&;
@@ -152,12 +149,11 @@ namespace TinySTL {
         using const_reference = const T&;
         using size_type       = size_t;
         using difference_type = ptrdiff_t;
-    
+
         using iterator       = forward_list_iterator<T, T&, T*>;
         using const_iterator = forward_list_iterator<T, const T&, const T*>;
-    
+
         using forward_list_allocator = simple_alloc<forward_list_node<T>, Alloc>;
-        // clang-format on
 
     private:
         // clang-format off
@@ -228,14 +224,14 @@ namespace TinySTL {
 
         forward_list& operator=(const forward_list& other) {
             if (this != &other) {
-                list_node_base* last = &m_head;
-                list_node* this_curr = (list_node*)m_head.next;
+                list_node_base* last        = &m_head;
+                list_node* this_curr        = (list_node*)m_head.next;
                 const list_node* other_curr = (const list_node*)other.m_head.next;
                 while (this_curr && other_curr) {
                     this_curr->data = other_curr->data;
-                    last = this_curr;
-                    this_curr = (list_node*)this_curr->next;
-                    other_curr = (const list_node*)other_curr->next;
+                    last            = this_curr;
+                    this_curr       = (list_node*)this_curr->next;
+                    other_curr      = (const list_node*)other_curr->next;
                 }
                 // Other is shorter.
                 if (other_curr == nullptr) {
@@ -278,9 +274,9 @@ namespace TinySTL {
         }
 
         list_node_base* erase_after_aux(list_node_base* pos) {
-            list_node* next = (list_node*)pos->next;
+            list_node* next           = (list_node*)pos->next;
             list_node_base* next_next = next->next;
-            pos->next = next_next;
+            pos->next                 = next_next;
             destory_node(next);
             return next_next;
         }
@@ -327,7 +323,7 @@ namespace TinySTL {
 
         void pop_front() {
             list_node* node = (list_node*)m_head.next;
-            m_head.next = node->next;
+            m_head.next     = node->next;
             destroy_nodes(node);
         }
 
@@ -475,7 +471,7 @@ namespace TinySTL {
             }
             // Other list is longer.
             if (other.m_head.next) {
-                curr->next = other.m_head.next;
+                curr->next        = other.m_head.next;
                 other.m_head.next = nullptr;
             }
         }

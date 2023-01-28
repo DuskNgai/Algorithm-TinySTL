@@ -24,8 +24,8 @@ namespace TinySTL {
         while (hole_index > top_index && *(first + parent) < value) {
             // Put the smaller value at the child hole.
             *(first + hole_index) = *(first + parent);
-            hole_index = parent;
-            parent = (hole_index - 1) / 2;
+            hole_index            = parent;
+            parent                = (hole_index - 1) / 2;
         }
         // Put the value at the hole it stopped.
         *(first + hole_index) = value;
@@ -39,7 +39,7 @@ namespace TinySTL {
     // Make the elements in [`first`, `last`) a maximum heap.
     template <typename RandomAccessIterator>
     inline void push_heap(RandomAccessIterator first, RandomAccessIterator last) {
-        __push_heap_aux(first, last, difference_type(first), value_type(first));
+        __push_heap_aux(first, last, distance_type(first), value_type(first));
     }
 
     template <typename RandomAccessIterator, typename Compare, typename Distance, typename T>
@@ -47,8 +47,8 @@ namespace TinySTL {
         Distance parent = (hole_index - 1) / 2;
         while (hole_index > top_index && comp(*(first + parent), value)) {
             *(first + hole_index) = *(first + parent);
-            hole_index = parent;
-            parent = (hole_index - 1) / 2;
+            hole_index            = parent;
+            parent                = (hole_index - 1) / 2;
         }
         *(first + hole_index) = value;
     }
@@ -60,7 +60,7 @@ namespace TinySTL {
 
     template <typename RandomAccessIterator, typename Compare>
     inline void push_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
-        __push_heap_aux(first, last, difference_type(first), value_type(first), comp);
+        __push_heap_aux(first, last, distance_type(first), value_type(first), comp);
     }
 
     //! Push Heap.
@@ -70,7 +70,7 @@ namespace TinySTL {
     template <typename RandomAccessIterator, typename Distance, typename T>
     void __adjust_heap(RandomAccessIterator first, Distance hole_index, Distance len, T value) {
         // Pop top element.
-        Distance top_index = hole_index;
+        Distance top_index   = hole_index;
         Distance secondChild = 2 * hole_index + 2;
         while (secondChild < len) {
             // Swap with the bigger child.
@@ -79,14 +79,14 @@ namespace TinySTL {
                 secondChild--;
             }
             *(first + hole_index) = *(first + secondChild);
-            hole_index = secondChild;
-            secondChild = 2 * secondChild + 2;
+            hole_index            = secondChild;
+            secondChild           = 2 * secondChild + 2;
         }
         // If reach the end, which means that `value` is still the minimum element.
         if (secondChild == len) {
             // Move the left child to parent hole.
             *(first + hole_index) = *(first + (secondChild - 1));
-            hole_index = secondChild - 1;
+            hole_index            = secondChild - 1;
         }
         // Insert the `value` at the hole it stopped.
         __push_heap(first, hole_index, top_index, value);
@@ -102,7 +102,7 @@ namespace TinySTL {
 
     template <typename RandomAccessIterator, typename T>
     inline void __pop_heap_aux(RandomAccessIterator first, RandomAccessIterator last, T*) {
-        __pop_heap(first, last - 1, last - 1, difference_type(first), T(*(last - 1)));
+        __pop_heap(first, last - 1, last - 1, distance_type(first), T(*(last - 1)));
     }
 
     template <typename RandomAccessIterator>
@@ -112,19 +112,19 @@ namespace TinySTL {
 
     template <typename RandomAccessIterator, typename Compare, typename Distance, typename T>
     void __adjust_heap(RandomAccessIterator first, Distance hole_index, Distance len, T value, Compare comp) {
-        Distance top_index = hole_index;
+        Distance top_index   = hole_index;
         Distance secondChild = 2 * hole_index + 2;
         while (secondChild < len) {
             if (comp(*(first + secondChild), *(first + (secondChild - 1)))) {
                 secondChild--;
             }
             *(first + hole_index) = *(first + secondChild);
-            hole_index = secondChild;
-            secondChild = 2 * secondChild + 2;
+            hole_index            = secondChild;
+            secondChild           = 2 * secondChild + 2;
         }
         if (secondChild == len) {
             *(first + hole_index) = *(first + (secondChild - 1));
-            hole_index = secondChild - 1;
+            hole_index            = secondChild - 1;
         }
         __push_heap(first, hole_index, top_index, value, comp);
     }
@@ -137,7 +137,7 @@ namespace TinySTL {
 
     template <typename RandomAccessIterator, typename Compare, typename T>
     inline void __pop_heap_aux(RandomAccessIterator first, RandomAccessIterator last, T*, Compare comp) {
-        __pop_heap(first, last - 1, last - 1, difference_type(first), T(*(last - 1)), comp);
+        __pop_heap(first, last - 1, last - 1, distance_type(first), T(*(last - 1)), comp);
     }
 
     template <typename RandomAccessIterator, typename Compare>
@@ -155,7 +155,7 @@ namespace TinySTL {
             return;
         }
 
-        Distance len = last - first;
+        Distance len    = last - first;
         Distance parent = (len - 2) / 2;
 
         // Floyd Algorithm.
@@ -170,7 +170,7 @@ namespace TinySTL {
 
     template <typename RandomAccessIterator>
     inline void make_heap(RandomAccessIterator first, RandomAccessIterator last) {
-        __make_heap(first, last, difference_type(first), value_type(first));
+        __make_heap(first, last, distance_type(first), value_type(first));
     }
 
     template <typename RandomAccessIterator, typename Compare, typename Distance, typename T>
@@ -179,7 +179,7 @@ namespace TinySTL {
             return;
         }
 
-        Distance len = last - first;
+        Distance len    = last - first;
         Distance parent = (len - 2) / 2;
 
         while (true) {
@@ -193,7 +193,7 @@ namespace TinySTL {
 
     template <typename RandomAccessIterator, typename Compare>
     inline void make_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
-        __make_heap(first, last, difference_type(first), value_type(first), comp);
+        __make_heap(first, last, distance_type(first), value_type(first), comp);
     }
 
     //! Make Heap.
