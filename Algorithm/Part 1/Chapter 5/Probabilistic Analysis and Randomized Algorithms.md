@@ -276,6 +276,63 @@ $$
 
 Suppose that you flip a fair coin $n$ times. What is the longest streak of consecutive heads that you expect to see?
 
+First prove it is $O(\log n)$.
+
+$A_{ij}$: A streak of heads of length at least $j$ begins with the $i$ th coin flip, $1\le j\le n$, $1\le i\le n-i+1$. Then $P(A_{ij})=1/2^j$.
+
+$L_j$: The longest streak of heads has length exactly $j$.
+
+$L$: The length of the longest streak.
+$$
+\begin{align*}
+\mathbb{E}[L]&=\sum_{j=0}^{n}jP(L_j)\\
+&=\sum_{j=0}^{2\lceil\log n\rceil-1}jP(L_j)+\sum_{j=2\lceil\log n\rceil}^{n}jP(L_j)\\
+&<\sum_{j=0}^{2\lceil\log n\rceil-1}(2\lceil\log n\rceil)P(L_j)+\sum_{j=2\lceil\log n\rceil}^{n}nP(L_j)\\
+&=2\lceil\log n\rceil\sum_{j=0}^{2\lceil\log n\rceil-1}P(L_j)+n\sum_{j=2\lceil\log n\rceil}^{n}P(L_j)\\
+&<2\lceil\log n\rceil+n/n\\
+&=O(\log n)
+\end{align*}
+$$
+
+---
+
+Since $\sum_{j=0}^{n}P(L_j)=1$, then $\sum_{j=0}^{2\lceil\log n\rceil-1}P(L_j)\le1$.
+
+And
+$$
+\begin{align*}
+\sum_{j=2\lceil\log n\rceil}^{n}P(L_j)&=P\biggl(\bigcup_{i=1}^{n-2\lceil\log n\rceil+1}A_{i,2\lceil\log n\rceil}\biggr)\\
+&\le\sum_{i=1}^{n-2\lceil\log n\rceil+1}P(A_{i,2\lceil\log n\rceil})\\
+&=\sum_{i=1}^{n-2\lceil\log n\rceil+1}\frac{1}{2^{2\lceil\log n\rceil}}\le\sum_{i=1}^{n-2\lceil\log n\rceil+1}\frac{1}{2^{2\log n}}\\
+&=\sum_{i=1}^{n-2\lceil\log n\rceil+1}\frac{1}{n^2}\le n\cdot\frac{1}{n^2}\\
+&=\frac{1}{n}
+\end{align*}
+$$
+
+---
+
+Then prove it is $\Omega(\log n)$.
+$$
+\begin{align*}
+\mathbb{E}[L]&=\sum_{j=0}^{n}jP(L_j)\\
+&=\sum_{j=0}^{\lfloor(\log n)/2\rfloor-1}jP(L_j)+\sum_{j=\lfloor(\log n)/2\rfloor}^{n}jP(L_j)\\
+&\ge0+\sum_{j=\lfloor(\log n)/2\rfloor}^{n}(\lfloor(\log n)/2\rfloor)P(L_j)\\
+&=\lfloor(\log n)/2\rfloor\sum_{j=\lfloor(\log n)/2\rfloor}^{n}P(L_j)\\
+\end{align*}
+$$
+
+---
+
+$$
+\begin{align*}
+\sum_{j=\lfloor(\log n)/2\rfloor}^{n}P(L_j)&=P\biggl(\bigcup_{i=1}^{n-\lfloor(\log n)/2\rfloor+1}A_{i,\lfloor(\log n)/2\rfloor}\biggr)\\
+P(A_{i,\lfloor(\log n)/2\rfloor})=\frac{1}{2^{\lfloor(\log n)/2\rfloor}}\ge\frac{1}{\sqrt{n}}
+\end{align*}
+$$
+
+
+
+
 ### Exercises
 
 #### 5.4-1

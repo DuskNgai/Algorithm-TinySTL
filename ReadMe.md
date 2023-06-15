@@ -24,15 +24,6 @@ git submodule update --init --recursive
 
 cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
 cmake --build ./build --parallel
-###### If you are using Visual Studio #####
-# Double click `Algorithm-TinySTL.sln`
-# set one project as starting project
-# make and run.
-###### End if you are using Visual Studio #####
-
-###### If you are using GCC/Clang #####
-make -j
-###### End if you are using GCC/Clang #####
 ```
 
 ## Ruminations on STL (C++98 Version)
