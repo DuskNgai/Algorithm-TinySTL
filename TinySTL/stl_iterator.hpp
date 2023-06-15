@@ -210,7 +210,7 @@ namespace TinySTL {
         // No use, just for standard.
         back_insert_iterator<Container>& operator*() { return *this; }
         back_insert_iterator<Container>& operator++() { return *this; }
-        back_insert_iterator<Container>& operator++(int) { return *this; }
+        back_insert_iterator<Container> operator++(int) { return *this; }
     };
 
     template <typename Container>
@@ -245,7 +245,7 @@ namespace TinySTL {
         // No use, just for standard.
         front_insert_iterator<Container>& operator*() { return *this; }
         front_insert_iterator<Container>& operator++() { return *this; }
-        front_insert_iterator<Container>& operator++(int) { return *this; }
+        front_insert_iterator<Container> operator++(int) { return *this; }
     };
 
     template <typename Container>
@@ -284,7 +284,7 @@ namespace TinySTL {
         // No use, just for standard.
         insert_iterator<Container>& operator*() { return *this; }
         insert_iterator<Container>& operator++() { return *this; }
-        insert_iterator<Container>& operator++(int) { return *this; }
+        insert_iterator<Container> operator++(int) { return *this; }
     };
 
     template <typename Container>
@@ -370,7 +370,7 @@ namespace TinySTL {
         // No use, just for standard.
         ostream_iterator<T>& operator*() { return *this; }
         ostream_iterator<T>& operator++() { return *this; }
-        ostream_iterator<T>& operator++(int) { return *this; }
+        ostream_iterator<T> operator++(int) { return *this; }
     };
 
     template <typename Iterator>

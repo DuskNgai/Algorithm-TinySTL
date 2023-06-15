@@ -22,9 +22,8 @@ cd Algorithm-TinySTL
 git submodule sync --recursive
 git submodule update --init --recursive
 
-mkdir build
-cd build
-cmake ..
+cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+cmake --build ./build --parallel
 ###### If you are using Visual Studio #####
 # Double click `Algorithm-TinySTL.sln`
 # set one project as starting project
@@ -130,12 +129,12 @@ STL 由六大组件（component）组成，分别是：
         - [x] Priority Queue (`stl_priority_queue.hpp`)
         - [x] Forward List (`stl_forward_list.hpp`)
     - [ ] Associative Containers
-        - [ ] Tree (`stl_tree.hpp`)
+        - [x] Tree (`stl_tree.hpp`)
         - [x] Pair (`stl_pair.hpp`)
         - [x] Set (`stl_set.hpp`)
         - [x] Map (`stl_map.hpp`)
-        - [ ] Multiset (`stl_multiset.hpp`)
-        - [ ] Multimap (`stl_multimap.hpp`)
+        - [x] Multiset (`stl_multiset.hpp`)
+        - [x] Multimap (`stl_multimap.hpp`)
         - [ ] Hash Table (`stl_hash_table.hpp`)
         - [x] Hash Function (`stl_hash_fun.hpp`)
         - [ ] Unordered Set (`stl_unordered_set.hpp`)

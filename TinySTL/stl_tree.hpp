@@ -146,12 +146,8 @@ namespace TinySTL {
             return temp;
         }
 
-        bool operator==(const rbtree_iterator_base& other) {
-            return m_node == other.m_node;
-        }
-        bool operator!=(const rbtree_iterator_base& other) {
-            return m_node != other.m_node;
-        }
+        bool operator==(const self& other) { return m_node == other.m_node; }
+        bool operator!=(const self& other) { return m_node != other.m_node; }
     };
 
     constexpr ptrdiff_t* distance_type(const rbtree_iterator_base&) {
@@ -178,10 +174,10 @@ namespace TinySTL {
     //     R       -->       R
     //     |       -->       |
     //     x       -->       y
-    //    / \      -->      / \  
+    //    / \      -->      / \
     //   a   y     -->     x   c
-    //      / \    -->    /\     
-    //     b   c   -->   a  b
+    //      / \    -->    / \
+    //     b   c   -->   a   b
     inline void rbtree_rotate_left(rbtree_node_base* x, rbtree_node_base*& root) {
         rbtree_node_base* y = x->right;
         x->right            = y->left;
@@ -213,9 +209,9 @@ namespace TinySTL {
     //       R     -->     R
     //       |     -->     |
     //       x     -->     y
-    //      / \    -->    / \    
+    //      / \    -->    / \
     //     y   c   -->   a   x
-    //    / \      -->      / \  
+    //    / \      -->      / \
     //   a   b     -->     b   c
     inline void rbtree_rotate_right(rbtree_node_base* x, rbtree_node_base*& root) {
         rbtree_node_base* y = x->left;
@@ -305,7 +301,6 @@ namespace TinySTL {
     }
 
     inline void rbtree_rebalance_for_erase(rbtree_node_base* x, rbtree_node_base*& root, rbtree_node_base*& leftmost, rbtree_node_base*& rightmost) {
-        
     }
 
     template <typename T, typename Alloc>
@@ -353,6 +348,11 @@ namespace TinySTL {
         using allocator_type  = typename base::allocator_type;
 
     protected:
+        // Total number of nodes in the tree.
+        size_type m_node_count;
+        // A functor.
+        Compare m_key_compare;
+
         link_type create_node(const value_type& value) {
             link_type temp = get_node();
             try {
@@ -379,11 +379,6 @@ namespace TinySTL {
         }
 
     protected:
-        // Total number of nodes in the tree.
-        size_type m_node_count;
-        // A functor.
-        Compare m_key_compare;
-
         // The parent of the sentinel node.
         link_type& root() const { return (link_type&)m_sentinel->parent; }
         // The left of the sentinel node.
@@ -409,10 +404,8 @@ namespace TinySTL {
         static link_type s_maximum(link_type node) { return (link_type)rbtree_node_base::s_maximum(node); }
 
     public:
-        // clang-format off
         using iterator       = rbtree_iterator<value_type, reference, pointer>;
         using const_iterator = rbtree_iterator<value_type, const_reference, const_pointer>;
-        // clang-format on
 
     public:
         rbtree()
@@ -507,31 +500,31 @@ namespace TinySTL {
             rightmost()         = m_sentinel;
         }
 
-        link_type rbtree_copy(link_type x, link_type p) {
-            link_type top = clone_node(x);
-            top->parent   = p;
+        link_type rbtree_copy(link_type src, link_type dst) {
+            link_type top = clone_node(src);
+            top->parent   = dst;
 
             try {
                 // Copy the right subtree.
-                if (x->right != nullptr) {
-                    s_right(top) = rbtree_copy(s_right(x), top);
+                if (src->right != nullptr) {
+                    s_right(top) = rbtree_copy(s_right(src), top);
                 }
                 // Prepare for the left subtree.
-                p = top;
-                x = s_left(x);
+                dst = top;
+                src = s_left(src);
 
                 // Copy the left subtree.
-                while (x != nullptr) {
+                while (src != nullptr) {
                     // Make link between parent and left child.
-                    link_type y = clone_node(x);
-                    s_left(p)   = y;
-                    s_parent(y) = p;
+                    link_type y = clone_node(src);
+                    s_left(dst) = y;
+                    s_parent(y) = dst;
                     // Copy the right subtree of left subtree.
-                    if (x->right != nullptr) {
-                        s_right(y) = rbtree_copy(s_right(x), y);
+                    if (src->right != nullptr) {
+                        s_right(y) = rbtree_copy(s_right(src), y);
                     }
-                    p = y;
-                    x = s_left(x);
+                    dst = y;
+                    src = s_left(src);
                 }
             }
             catch (const std::exception&) {
@@ -769,6 +762,16 @@ namespace TinySTL {
                 for (; first != last; ++first) {
                     erase(first);
                 }
+            }
+        }
+
+        void clear() {
+            if (m_node_count != 0) {
+                erase_aux(root());
+                root()       = nullptr;
+                leftmost()   = m_sentinel;
+                rightmost()  = m_sentinel;
+                m_node_count = 0;
             }
         }
 
