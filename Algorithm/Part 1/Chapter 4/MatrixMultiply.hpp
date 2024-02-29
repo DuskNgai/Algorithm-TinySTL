@@ -15,13 +15,7 @@ namespace Algorithm {
         SquareMatrix() = default;
         SquareMatrix(int n)
             : m_n(n)
-            , m_data(n * n) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    this->operator()(i, j) = T();
-                }
-            }
-        }
+            , m_data(n * n) {}
         ~SquareMatrix() = default;
 
     public:
@@ -38,12 +32,8 @@ namespace Algorithm {
         int GetN() const { return m_n; }
 
         SquareMatrix operator+(SquareMatrix const& rhs) {
-            SquareMatrix ret(m_n);
-            for (int i = 0; i < m_n; ++i) {
-                for (int j = 0; j < m_n; ++j) {
-                    ret(i, j) = this->operator()(i, j) + rhs(i, j);
-                }
-            }
+            SquareMatrix ret = *this;
+            ret += rhs;
             return ret;
         }
         SquareMatrix& operator+=(SquareMatrix const& rhs) {
@@ -55,12 +45,8 @@ namespace Algorithm {
             return *this;
         }
         SquareMatrix operator-(SquareMatrix const& rhs) {
-            SquareMatrix ret(m_n);
-            for (int i = 0; i < m_n; ++i) {
-                for (int j = 0; j < m_n; ++j) {
-                    ret(i, j) = this->operator()(i, j) - rhs(i, j);
-                }
-            }
+            SquareMatrix ret = *this;
+            ret -= rhs;
             return ret;
         }
         SquareMatrix& operator-=(SquareMatrix const& rhs) {
@@ -80,7 +66,7 @@ namespace Algorithm {
         const T* begin() const { return m_data.begin(); }
         const T* end() const { return m_data.end(); }
     };
-    
+
     template <typename T>
     void MatrixMultiply(const SquareMatrix<T>& a, const SquareMatrix<T>& b, SquareMatrix<T>& c) {
         if (a.GetN() != b.GetN()) {
@@ -97,9 +83,10 @@ namespace Algorithm {
         }
     }
 
+    /// @brief Only for n = 2^k matrix.
     template <typename T>
     void MatrixMultiplyRecursive(const SquareMatrix<T>& a, const SquareMatrix<T>& b, SquareMatrix<T>& c) {
-        if (a.GetN() != b.GetN() || a.GetN() & (a.GetN() - 1) != 0) {
+        if (a.GetN() != b.GetN() || (a.GetN() & (a.GetN() - 1)) != 0) {
             return;
         }
         MatrixMultiplyRecursiveAux(a, b, c, a.GetN(), 0, 0, 0, 0, 0, 0);
@@ -123,9 +110,10 @@ namespace Algorithm {
         }
     }
 
+    /// @brief Only for n = 2^k matrix.
     template <typename T>
     void Strassen(const SquareMatrix<T>& a, const SquareMatrix<T>& b, SquareMatrix<T>& c) {
-        if (a.GetN() != b.GetN() || a.GetN() & (a.GetN() - 1) != 0) {
+        if (a.GetN() != b.GetN() || (a.GetN() & (a.GetN() - 1)) != 0) {
             return;
         }
         StrassenAux(a, b, c, a.GetN(), 0, 0, 0, 0, 0, 0);
@@ -177,4 +165,4 @@ namespace Algorithm {
     }
 }
 
-#endif // _ALGORITHM_MATRIX_MULTIPLY_HPP_
+#endif // !_ALGORITHM_MATRIX_MULTIPLY_HPP_

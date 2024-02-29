@@ -27,7 +27,7 @@ namespace TinySTL {
     /// @brief Dispatch to auxilary function that based on whether it is POD type or not.
     template <typename InputIterator, typename ForwardIterator, typename T>
     ForwardIterator _uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result, T* p) {
-        using is_POD = __type_traits<T>::is_POD_type;
+        using is_POD = typename __type_traits<T>::is_POD_type;
         return _uninitialized_copy_aux(first, last, result, is_POD());
     }
 
@@ -58,7 +58,7 @@ namespace TinySTL {
     /// @brief Dispatch to auxilary function that based on whether it is POD type or not.
     template <typename ForwardIterator, typename T, typename I>
     inline void _uninitialized_fill(ForwardIterator first, ForwardIterator last, const T& value, I*) {
-        using is_POD = __type_traits<I>::is_POD_type;
+        using is_POD = typename __type_traits<I>::is_POD_type;
         _uninitialized_fill_aux(first, last, value, is_POD());
     }
 
@@ -89,7 +89,7 @@ namespace TinySTL {
     /// @brief Dispatch to auxilary function that based on whether it is POD type or not.
     template <typename ForwardIterator, typename size, typename T, typename I>
     ForwardIterator _uninitialized_fill_n(ForwardIterator first, size n, const T& value, I* t) {
-        using is_POD = __type_traits<I>::is_POD_type;
+        using is_POD = typename __type_traits<I>::is_POD_type;
         return _uninitialized_fill_n_aux(first, n, value, is_POD());
     }
 

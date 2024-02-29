@@ -16,8 +16,11 @@ protected:
 
     TinySTL::vector<const char*> list5;
 
+    std::mt19937_64 rng;
+
 protected:
     virtual void SetUp() override {
+        rng.seed(0);
         {
             int data[] = {16, 4, 10, 14, 7, 9, 3, 2, 8, 1};
             list1.insert(list1.end(), std::begin(data), std::end(data));
@@ -52,7 +55,7 @@ TEST_F(TestHeap, TestMaxHeap) {
     EXPECT_PRED2(Algorithm::EqualTwoContainer<TinySTL::vector<int>>, list2, reference);
 
     auto comp = [](const char* a, const char* b) { return strcmp(a, b) < 0; };
-    TinySTL::random_shuffle(list5.begin(), list5.end());
+    TinySTL::random_shuffle(list5.begin(), list5.end(), rng);
     TinySTL::make_heap(list5.begin(), list5.end(), comp);
     TinySTL::copy(list5.begin(), list5.end(), TinySTL::ostream_iterator<const char*>(std::cout, " ")); std::cout << std::endl;
     EXPECT_TRUE(TinySTL::is_heap(list5.begin(), list5.end(), comp));
@@ -71,7 +74,7 @@ TEST_F(TestHeap, TestMinHeap) {
     EXPECT_PRED2(Algorithm::EqualTwoContainer<TinySTL::vector<int>>, list4, reference2);
 
     auto comp = [](const char* a, const char* b) { return strcmp(a, b) > 0; };
-    TinySTL::random_shuffle(list5.begin(), list5.end());
+    TinySTL::random_shuffle(list5.begin(), list5.end(), rng);
     TinySTL::make_heap(list5.begin(), list5.end(), comp);
     TinySTL::copy(list5.begin(), list5.end(), TinySTL::ostream_iterator<const char*>(std::cout, " ")); std::cout << std::endl;
     EXPECT_TRUE(TinySTL::is_heap(list5.begin(), list5.end(), comp));

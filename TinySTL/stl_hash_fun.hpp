@@ -1,6 +1,8 @@
 #ifndef _TINYSTL_HASH_FUN_HPP_
 #define _TINYSTL_HASH_FUN_HPP_
 
+#include <cstddef>
+
 namespace TinySTL {
 
     template <typename Key>

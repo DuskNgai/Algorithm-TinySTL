@@ -4,7 +4,6 @@
 
 #include <Part 3/Chapter 12/BinarySearchTree.hpp>
 #include <stl_vector.hpp>
-#include <Utility/Utility.hpp>
 
 class TestBinarySearchTree : public testing::Test {
 protected:

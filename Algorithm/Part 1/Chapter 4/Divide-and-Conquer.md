@@ -156,7 +156,7 @@ where $aT(n/b)$ actually means $a'T(\lfloor n/b\rfloor)+a''T(\lceil n/b\rceil)$ 
 
 1. If $f(n)=O(n^{\log_ba})$, and $\exist\epsilon>0, f(n)=O(n^{\log_ba-\epsilon})\Rightarrow T(n)=\Theta(n^{\log_ba})$.
 2. If $f(n)=\Theta(n^{\log_ba})$, and $\exist k\ge0,f(n)=\Theta(n^{\log_ba}\log^kn)\Rightarrow T(n)=\Theta(n^{\log_ba}\log^{k+1}n)$.
-3. If $f(n)=\Omega(n^{\log_ba})$, and $\exist\epsilon>0, f(n)=\Omega(n^{\log_ba+\epsilon})\and\exist c<1,n_0>0,\forall n\ge n_0,af(n/b)\le cf(n)\Rightarrow T(n)=\Theta(n^{\log_ba})$.
+3. If $f(n)=\Omega(n^{\log_ba})$, and $\exist\epsilon>0, f(n)=\Omega(n^{\log_ba+\epsilon})\wedge\exist c<1,n_0>0,\forall n\ge n_0,af(n/b)\le cf(n)\Rightarrow T(n)=\Theta(n^{\log_ba})$.
 
 ### Exercises
 

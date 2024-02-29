@@ -735,24 +735,14 @@ namespace TinySTL {
 
     //! O(n)
     // Random shuffle a range.
-    template <typename RandomAccessIterator>
-    inline void random_shuffle(RandomAccessIterator first, RandomAccessIterator last) {
-        if (first == last) {
-            return;
-        }
-        for (RandomAccessIterator i = first + 1; i != last; ++i) {
-            TinySTL::iter_swap(i, first + rand() % ((i - first) + 1));
-        }
-    }
 
-    //! O(n)
     template <typename RandomAccessIterator, typename RandomNumberGenerator>
     inline void random_shuffle(RandomAccessIterator first, RandomAccessIterator last, RandomNumberGenerator& rng) {
         if (first == last) {
             return;
         }
         for (RandomAccessIterator i = first + 1; i != last; ++i) {
-            TinySTL::iter_swap(i, first + rng((i - first) + 1));
+            TinySTL::iter_swap(i, first + rng() % (i - first) + 1);
         }
     }
 

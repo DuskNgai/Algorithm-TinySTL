@@ -39,7 +39,7 @@ The definition of $O(g(n))$ requires that every function $f(n)$ in the set $O(g(
 
 **Theorem 3.1**
 $$
-f(n)=\Theta(g(n))\Leftrightarrow f(n)=O(g(n)) \and f(n)=\Omega(g(n))
+f(n)=\Theta(g(n))\Leftrightarrow f(n)=O(g(n)) \wedge f(n)=\Omega(g(n))
 $$
 
 我们不能说：插入排序的运行时间是 $\Theta(n^2)$。这是一个夸张的说法，因为从中省略了 "最坏情况"，我们只剩下一个涵盖所有情况的一揽子声明。这里的错误在于插入排序并不是在所有情况下都以 $\Theta(n^2)$ 的时间运行，因为正如我们所看到的，它在最佳情况下以 $\Theta(n)$ 时间运行。我们可以说，插入排序的运行时间是 $O(n^2)$。
@@ -64,11 +64,11 @@ $f(n)$ 是 $g(n)$ 的高阶无穷大。即在 $n$ 足够大的时候，$f(n)$ �
 
 **Transitivity**
 $$
-f(n)=\Theta(g(n))\ \and\ g(n)=\Theta(h(n))\ \Rightarrow\ f(n)=\Theta(h(n))\\
-f(n)=O(g(n))\ \and\ g(n)=O(h(n))\ \Rightarrow\ f(n)=O(h(n))\\
-f(n)=\Omega(g(n))\ \and\ g(n)=\Omega(h(n))\ \Rightarrow\ f(n)=\Omega(h(n))\\
-f(n)=o(g(n))\ \and\ g(n)=o(h(n))\ \Rightarrow\ f(n)=o(h(n))\\
-f(n)=\omega(g(n))\ \and\ g(n)=\omega(h(n))\ \Rightarrow\ f(n)=\omega(h(n))
+f(n)=\Theta(g(n))\ \wedge\ g(n)=\Theta(h(n))\ \Rightarrow\ f(n)=\Theta(h(n))\\
+f(n)=O(g(n))\ \wedge\ g(n)=O(h(n))\ \Rightarrow\ f(n)=O(h(n))\\
+f(n)=\Omega(g(n))\ \wedge\ g(n)=\Omega(h(n))\ \Rightarrow\ f(n)=\Omega(h(n))\\
+f(n)=o(g(n))\ \wedge\ g(n)=o(h(n))\ \Rightarrow\ f(n)=o(h(n))\\
+f(n)=\omega(g(n))\ \wedge\ g(n)=\omega(h(n))\ \Rightarrow\ f(n)=\omega(h(n))
 $$
 
 **Reflexivity**

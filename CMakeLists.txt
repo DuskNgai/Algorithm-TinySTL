@@ -15,14 +15,17 @@ endif()
 # Building type
 set(CMAKE_BUILD_TYPE "Release")
 
+# Include cmake scripts
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/dependencies.cmake")
+
 # gtest
 enable_testing()
-add_subdirectory("${CMAKE_SOURCE_DIR}/dependency/gtest")
 
 list(APPEND ALGORITHM_INCLUDES
-    "${CMAKE_SOURCE_DIR}/dependency/gtest/googletest"
-    "${CMAKE_SOURCE_DIR}/Algorithm"
-    "${CMAKE_SOURCE_DIR}/TinySTL"
+    "${CMAKE_CURRENT_SOURCE_DIR}/dependency/gtest/googletest"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Algorithm"
+    "${CMAKE_CURRENT_SOURCE_DIR}/TinySTL"
 )
 
 list(APPEND ALGORITHM_LIBRARIES
@@ -30,4 +33,4 @@ list(APPEND ALGORITHM_LIBRARIES
     gtest_main
 )
 
-add_subdirectory("${CMAKE_SOURCE_DIR}/test")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/test")

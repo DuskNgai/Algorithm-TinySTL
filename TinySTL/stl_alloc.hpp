@@ -30,7 +30,7 @@ namespace TinySTL {
             ::operator delete(ptr);
         }
 
-        static void reallocate(void* ptr, size_t old_size, size_t new_size) {
+        static void* reallocate(void* ptr, size_t old_size, size_t new_size) {
             void* space = realloc(ptr, new_size);
             if (space == nullptr)
                 space = __oom_realloc(ptr, new_size);

@@ -461,7 +461,7 @@ namespace TinySTL {
         bool operator!=(const reverse_iterator& other) const { return this->base() != other.base(); }
         bool operator<(const reverse_iterator& other) const { return other.base() < this->base(); }
 
-        typename difference_type operator-(const reverse_iterator& other) const {
+        difference_type operator-(const reverse_iterator& other) const {
             return difference_type(other.base() - this->base());
         }
     };

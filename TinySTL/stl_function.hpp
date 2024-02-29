@@ -4,7 +4,7 @@
 namespace TinySTL {
 
     //! After C++11, lambda function together with type deduction have taken over these functionalities...
-    //! That is, they are all deprecated.
+    //! That is, they all have been deprecated.
 
     // Two base functor.
 

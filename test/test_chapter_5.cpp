@@ -1,3 +1,5 @@
+#include <random>
+
 #include <gtest/gtest.h>
 
 #include <stl_algorithm.hpp>
@@ -17,7 +19,8 @@ protected:
 };
 
 TEST_F(TestRandom, TestRandomShuffle) {
-    TinySTL::random_shuffle(list1.begin(), list1.end());
+    std::mt19937_64 rng(0);
+    TinySTL::random_shuffle(list1.begin(), list1.end(), rng);
     TinySTL::copy(list1.begin(), list1.end(), TinySTL::ostream_iterator<int>(std::cout, " "));
     std::cout << std::endl;
 }

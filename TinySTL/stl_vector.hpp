@@ -79,7 +79,7 @@ namespace TinySTL {
         }
 
         /// @brief: Insert one default value at given `pos`.
-        static void insert_aux(iterator pos) {
+        void insert_aux(iterator pos) {
             // If there are some space left.
             if (m_finish != m_end_of_storage) {
                 // Copy the value in `m_finish - 1` to `m_finish`, it need to be constructed first.

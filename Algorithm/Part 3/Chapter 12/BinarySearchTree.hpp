@@ -38,15 +38,15 @@ namespace Algorithm {
 
     template <typename T>
     const Node<T>* BinarySearchTree<T>::RecursiveSearch(const T& value) const {
-        if (m_root == nullptr) {
-            return m_root;
+        if (this->m_root == nullptr) {
+            return this->m_root;
         }
-        return m_root->RecursiveSearch(value);
+        return this->m_root->RecursiveSearch(value);
     }
 
     template <typename T>
     const Node<T>* BinarySearchTree<T>::IterativeSearch(const T& value) const {
-        Node<T>* temp = m_root;
+        Node<T>* temp = this->m_root;
         while (temp != nullptr && temp->retrieve() != value) {
             if (value < temp->retrieve())
                 temp = temp->left();
@@ -59,21 +59,21 @@ namespace Algorithm {
     template <typename T>
     const Node<T>* BinarySearchTree<T>::RecursiveMinimum(Node<T>* node) const {
         if (node == nullptr)
-            node = m_root;
+            node = this->m_root;
         return node->RecursiveMinimum();
     }
 
     template <typename T>
     const Node<T>* BinarySearchTree<T>::RecursiveMaximum(Node<T>* node) const {
         if (node == nullptr)
-            node = m_root;
+            node = this->m_root;
         return node->RecursiveMaximum();
     }
 
     template <typename T>
     const Node<T>* BinarySearchTree<T>::IterativeMinimum(Node<T>* node) const {
         if (node == nullptr)
-            node = m_root;
+            node = this->m_root;
         Node<T>* temp = node;
         while (temp->left() != nullptr) {
             temp = temp->left();
@@ -84,7 +84,7 @@ namespace Algorithm {
     template <typename T>
     const Node<T>* BinarySearchTree<T>::IterativeMaximum(Node<T>* node) const {
         if (node == nullptr)
-            node = m_root;
+            node = this->m_root;
         Node<T>* temp = node;
         while (temp->right() != nullptr) {
             temp = temp->right();
@@ -94,7 +94,7 @@ namespace Algorithm {
 
     template <typename T>
     void BinarySearchTree<T>::Insert(Node<T>* node) {
-        Node<T>* curr = m_root; // Node being compared with given node.
+        Node<T>* curr = this->m_root; // Node being compared with given node.
         Node<T>* last = curr;   // The parent of the given node.
 
         // Descend until reaching a leaf.
@@ -110,7 +110,7 @@ namespace Algorithm {
 
         // Insert the node.
         if (last == nullptr)
-            m_root = node;
+            this->m_root = node;
         else if (node->retrieve() < last->retrieve())
             last->m_left = node;
         else
@@ -148,8 +148,8 @@ namespace Algorithm {
     template <typename T>
     void BinarySearchTree<T>::Transplant(Node<T>*& src, Node<T>*& dst) {
         // `dst` is root.
-        if (dst == m_root)
-            m_root = src;
+        if (dst == this->m_root)
+            this->m_root = src;
         // `dst` is on the left.
         else if (dst == dst->parent()->left())
             dst->m_parent->m_left = src;
