@@ -1,4 +1,4 @@
-set(TestedChapter 2 4 5 6 12)
+set(TestedChapter 2 4 5 6 7 12)
 
 foreach(i ${TestedChapter})
     add_executable(test_chapter_${i} test_chapter_${i}.cpp)

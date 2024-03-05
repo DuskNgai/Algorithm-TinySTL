@@ -62,85 +62,85 @@ protected:
 TEST_F(TestSort, InsertionSortRepeatingTerms) {
     TinySTL::sort(repeat.begin(), repeat.end(), std::less<int>());
     Algorithm::InsertionSort(repeat_copy.begin(), repeat_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(repeat.begin(), repeat.end(), repeat_copy.begin()));
+    EXPECT_EQ(repeat, repeat_copy);
 }
 
 TEST_F(TestSort, InsertionSortEmptyList) {
     TinySTL::sort(empty.begin(), empty.end(), std::less<int>());
     Algorithm::InsertionSort(empty_copy.begin(), empty_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(empty.begin(), empty.end(), empty_copy.begin()));
+    EXPECT_EQ(empty, empty_copy);
 }
 
 TEST_F(TestSort, InsertionSortNegativeNumber) {
     TinySTL::sort(negative.begin(), negative.end(), std::less<int>());
     Algorithm::InsertionSort(negative_copy.begin(), negative_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(negative.begin(), negative.end(), negative_copy.begin()));
+    EXPECT_EQ(negative, negative_copy);
 }
 
 TEST_F(TestSort, InsertionSortFloatingPoint) {
     TinySTL::sort(fp.begin(), fp.end(), std::less<double>());
     Algorithm::InsertionSort(fp_copy.begin(), fp_copy.end(), std::less<double>());
-    EXPECT_TRUE(TinySTL::equal(fp.begin(), fp.end(), fp_copy.begin()));
+    EXPECT_EQ(fp, fp_copy);
 }
 
 TEST_F(TestSort, InsertionSortSortedArray) {
     TinySTL::sort(sorted.begin(), sorted.end(), std::less<int>());
     Algorithm::InsertionSort(sorted_copy.begin(), sorted_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(sorted.begin(), sorted.end(), sorted_copy.begin()));
+    EXPECT_EQ(sorted, sorted_copy);
 }
 
 TEST_F(TestSort, InsertionSortReversedArray) {
     TinySTL::sort(reversed.begin(), reversed.end(), std::less<int>());
     Algorithm::InsertionSort(reversed_copy.begin(), reversed_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(reversed.begin(), reversed.end(), reversed_copy.begin()));
+    EXPECT_EQ(reversed, reversed_copy);
 }
 
 TEST_F(TestSort, InsertionSortLargeArray) {
     TinySTL::sort(large.begin(), large.end(), std::less<int>());
     Algorithm::InsertionSort(large_copy.begin(), large_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(large.begin(), large.end(), large_copy.begin()));
+    EXPECT_EQ(large, large_copy);
 }
 
 TEST_F(TestSort, MergeSortRepeatingTerms) {
     TinySTL::sort(repeat.begin(), repeat.end(), std::less<int>());
     Algorithm::MergeSort(repeat_copy.begin(), repeat_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(repeat.begin(), repeat.end(), repeat_copy.begin()));
+    EXPECT_EQ(repeat, repeat_copy);
 }
 
 TEST_F(TestSort, MergeSortEmptyList) {
     TinySTL::sort(empty.begin(), empty.end(), std::less<int>());
     Algorithm::MergeSort(empty_copy.begin(), empty_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(empty.begin(), empty.end(), empty_copy.begin()));
+    EXPECT_EQ(empty, empty_copy);
 }
 
 TEST_F(TestSort, MergeSortNegativeNumber) {
     TinySTL::sort(negative.begin(), negative.end(), std::less<int>());
     Algorithm::MergeSort(negative_copy.begin(), negative_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(negative.begin(), negative.end(), negative_copy.begin()));
+    EXPECT_EQ(negative, negative_copy);
 }
 
 TEST_F(TestSort, MergeSortFloatingPoint) {
     TinySTL::sort(fp.begin(), fp.end(), std::less<double>());
     Algorithm::MergeSort(fp_copy.begin(), fp_copy.end(), std::less<double>());
-    EXPECT_TRUE(TinySTL::equal(fp.begin(), fp.end(), fp_copy.begin()));
+    EXPECT_EQ(fp, fp_copy);
 }
 
 TEST_F(TestSort, MergeSortSortedArray) {
     TinySTL::sort(sorted.begin(), sorted.end(), std::less<int>());
     Algorithm::MergeSort(sorted_copy.begin(), sorted_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(sorted.begin(), sorted.end(), sorted_copy.begin()));
+    EXPECT_EQ(sorted, sorted_copy);
 }
 
 TEST_F(TestSort, MergeSortReversedArray) {
     TinySTL::sort(reversed.begin(), reversed.end(), std::less<int>());
     Algorithm::MergeSort(reversed_copy.begin(), reversed_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(reversed.begin(), reversed.end(), reversed_copy.begin()));
+    EXPECT_EQ(reversed, reversed_copy);
 }
 
 TEST_F(TestSort, MergeSortLargeArray) {
     TinySTL::sort(large.begin(), large.end(), std::less<int>());
     Algorithm::MergeSort(large_copy.begin(), large_copy.end(), std::less<int>());
-    EXPECT_TRUE(TinySTL::equal(large.begin(), large.end(), large_copy.begin()));
+    EXPECT_EQ(large, large_copy);
 }
 
 int main(int argc, char* argv[]) {

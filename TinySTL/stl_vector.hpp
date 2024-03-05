@@ -433,15 +433,15 @@ namespace TinySTL {
             TinySTL::swap(m_end_of_storage, other.m_end_of_storage);
         }
 
-        bool operator==(const vector& other) {
+        bool operator==(const vector& other) const {
             return size() == other.size() && equal(begin(), end(), other.begin());
         }
 
-        bool operator!=(const vector& other) {
+        bool operator!=(const vector& other) const {
             return !operator==(other);
         }
 
-        bool operator<(const vector& other) {
+        bool operator<(const vector& other) const {
             return TinySTL::lexicographical_compare(begin(), end(), other.begin(), other.end());
         }
     };

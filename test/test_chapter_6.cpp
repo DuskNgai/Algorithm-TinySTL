@@ -5,7 +5,6 @@
 #include <stl_heap.hpp>
 #include <stl_queue.hpp>
 #include <stl_vector.hpp>
-#include <Utility/Utility.hpp>
 
 class TestHeap : public testing::Test {
 protected:
@@ -49,10 +48,10 @@ TEST_F(TestHeap, TestMaxHeap) {
     TinySTL::vector<int> reference(std::begin(data), std::end(data));
 
     TinySTL::__adjust_heap(list1.begin(), (int64_t)1, (int64_t)list1.size(), list1[1]);
-    EXPECT_PRED2(Algorithm::EqualTwoContainer<TinySTL::vector<int>>, list1, reference);
+    EXPECT_EQ(list1, reference);
 
     TinySTL::make_heap(list2.begin(), list2.end());
-    EXPECT_PRED2(Algorithm::EqualTwoContainer<TinySTL::vector<int>>, list2, reference);
+    EXPECT_EQ(list2, reference);
 
     auto comp = [](const char* a, const char* b) { return strcmp(a, b) < 0; };
     TinySTL::random_shuffle(list5.begin(), list5.end(), rng);
@@ -68,10 +67,10 @@ TEST_F(TestHeap, TestMinHeap) {
     TinySTL::vector<int> reference2(std::begin(data2), std::end(data2));
 
     TinySTL::__adjust_heap(list3.begin(), (int64_t)1, (int64_t)list3.size(), list3[1], TinySTL::greater<int>());
-    EXPECT_PRED2(Algorithm::EqualTwoContainer<TinySTL::vector<int>>, list3, reference1);
+    EXPECT_EQ(list3, reference1);
 
     TinySTL::make_heap(list4.begin(), list4.end(), TinySTL::greater<int>());
-    EXPECT_PRED2(Algorithm::EqualTwoContainer<TinySTL::vector<int>>, list4, reference2);
+    EXPECT_EQ(list4, reference2);
 
     auto comp = [](const char* a, const char* b) { return strcmp(a, b) > 0; };
     TinySTL::random_shuffle(list5.begin(), list5.end(), rng);
@@ -83,13 +82,13 @@ TEST_F(TestHeap, TestMinHeap) {
 TEST_F(TestHeap, TestMaxPriorityQueue) {
     auto comp = [](const char* a, const char* b) { return strcmp(a, b) < 0; };
     TinySTL::priority_queue<const char*, TinySTL::vector<const char*>, decltype(comp)> pq(list5.begin(), list5.end(), comp);
-    EXPECT_EQ(pq.top(), "NY");
+    EXPECT_STREQ(pq.top(), "NY");
 }
 
 TEST_F(TestHeap, TestMinPriorityQueue) {
     auto comp = [](const char* a, const char* b) { return strcmp(a, b) > 0; };
     TinySTL::priority_queue<const char*, TinySTL::vector<const char*>, decltype(comp)> pq(list5.begin(), list5.end(), comp);
-    EXPECT_EQ(pq.top(), "AK");
+    EXPECT_STREQ(pq.top(), "AK");
 }
 
 int main(int argc, char* argv[]) {

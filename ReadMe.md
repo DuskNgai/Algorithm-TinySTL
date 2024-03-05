@@ -19,8 +19,6 @@ In the first round, we will go through the whole book. In the second round, we w
 ```bash
 git clone https://github.com/DuskNgai/Algorithm-TinySTL
 cd Algorithm-TinySTL
-git submodule sync --recursive
-git submodule update --init --recursive
 
 cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
 cmake --build ./build --parallel
