@@ -52,8 +52,7 @@ namespace TinySTL {
         pointer operator->() const { return m_curr; }
 
         difference_type operator-(const self& other) const {
-            return difference_type(buffer_size()) * (m_node - other.m_node - 1) +
-                   (m_curr - m_first) + (other.m_last - other.m_curr);
+            return difference_type(buffer_size()) * (m_node - other.m_node - 1) + (m_curr - m_first) + (other.m_last - other.m_curr);
         }
 
         void set_node(map_pointer new_node) {
@@ -104,8 +103,7 @@ namespace TinySTL {
                 // If in [buffer_size(), +infty), divide directively.
                 // If in (-infty, 0), move to correspond buffer's head.
                 difference_type node_offset =
-                    pos_offset > 0 ? pos_offset / difference_type(buffer_size())
-                                   : -difference_type((-pos_offset - 1) / buffer_size()) - 1;
+                    pos_offset > 0 ? pos_offset / difference_type(buffer_size()) : -difference_type((-pos_offset - 1) / buffer_size()) - 1;
                 set_node(m_node + node_offset);
                 // Then adjust the `m_curr`.
                 m_curr = m_first + (pos_offset - node_offset * difference_type(buffer_size()));
@@ -131,27 +129,24 @@ namespace TinySTL {
             return *((*this + n));
         }
 
-        bool operator==(const deque_iterator& other) const {
-            return m_curr == other.m_curr;
+        friend bool operator==(const map& lhs, const map& rhs) noexcept { return lhs.m_curr == rhs.m_curr; }
+        friend bool operator!=(const map& lhs, const map& rhs) noexcept { return !(lhs == rhs); }
+        friend bool operator<(const map& lhs, const map& rhs) noexcept {
+            return (lhs.m_node == rhs.m_node) ? (lhs.m_curr < rhs.m_curr) : (lhs.m_node < rhs.m_node);
         }
-
-        bool operator!=(const deque_iterator& other) const {
-            return m_curr != other.m_curr;
-        }
-
-        bool operator<(const deque_iterator& other) const {
-            return (m_node == other.m_node) ? (m_curr < other.m_curr) : (m_node < other.m_node);
-        }
+        friend bool operator>(const map& lhs, const map& rhs) noexcept { return rhs < lhs; }
+        friend bool operator<=(const map& lhs, const map& rhs) noexcept { return !(rhs < lhs); }
+        friend bool operator>=(const map& lhs, const map& rhs) noexcept { return !(lhs < rhs); }
     };
 
     template <typename T, typename Ref, typename Ptr, size_t BufSize>
     constexpr ptrdiff_t* distance_type(const deque_iterator<T, Ref, Ptr, BufSize>&) {
-        return static_cast<ptrdiff_t*>(0);
+        return nullptr;
     }
 
     template <typename T, typename Ref, typename Ptr, size_t BufSize>
     constexpr T* value_type(const deque_iterator<T, Ref, Ptr, BufSize>&) {
-        return static_cast<T*>(0);
+        return nullptr;
     }
 
     template <typename T, typename Ref, typename Ptr, size_t BufSize>
@@ -959,23 +954,36 @@ namespace TinySTL {
             m_finish = m_start;
         }
 
-        void swap(deque& other) {
-            TinySTL::swap(m_start, other.m_start);
-            TinySTL::swap(m_finish, other.m_finish);
-            TinySTL::swap(m_map, other.m_map);
-            TinySTL::swap(m_map_size, other.m_map_size);
+        friend void swap(deque& lhs, deque& rhs) {
+            using std::swap;
+            swap(m_start, other.m_start);
+            swap(m_finish, other.m_finish);
+            swap(m_map, other.m_map);
+            swap(m_map_size, other.m_map_size);
         }
 
-        bool operator==(const deque& other) const {
-            return (size() == other.size() && equal(begin(), end(), other.begin()));
+        friend bool operator==(const vector& lhs, const vector& rhs) noexcept {
+            return lhs.size() == rhs.size() && TinySTL::equal(lhs.begin(), lhs.end(), rhs.begin());
         }
 
-        bool operator!=(const deque& other) const {
-            return !operator==(other);
+        friend bool operator!=(const vector& lhs, const vector& rhs) noexcept {
+            return !(lhs == rhs);
         }
 
-        bool operator<=(const deque& other) const {
-            return lexicographical_compare(begin(), end(), other.begin(), other.end());
+        friend bool operator<(const vector& lhs, const vector& rhs) noexcept {
+            return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+
+        friend bool operator>(const vector& lhs, const vector& rhs) noexcept {
+            return rhs < lhs;
+        }
+
+        friend bool operator<=(const vector& lhs, const vector& rhs) noexcept {
+            return !(rhs < lhs);
+        }
+
+        friend bool operator>=(const vector& lhs, const vector& rhs) noexcept {
+            return !(lhs < rhs);
         }
     };
 

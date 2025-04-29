@@ -146,17 +146,17 @@ namespace TinySTL {
             return temp;
         }
 
-        bool operator==(const self& other) { return m_node == other.m_node; }
-        bool operator!=(const self& other) { return m_node != other.m_node; }
+        friend bool operator==(const self& lhs, const self& rhs) { return lhs.m_node == rhs.m_node; }
+        friend bool operator!=(const self& lhs, const self& rhs) { return lhs.m_node != rhs.m_node; }
     };
 
     constexpr ptrdiff_t* distance_type(const rbtree_iterator_base&) {
-        return static_cast<ptrdiff_t*>(0);
+        return nullptr;
     }
 
     template <typename T, typename Ref, typename Ptr>
     constexpr T* value_type(const rbtree_iterator<T, Ref, Ptr>&) {
-        return static_cast<T*>(0);
+        return nullptr;
     }
 
     constexpr bidirectional_iterator_tag iterator_category(const rbtree_iterator_base&) {
@@ -474,22 +474,35 @@ namespace TinySTL {
         bool empty() const { return m_node_count == 0; }
         size_type size() const { return m_node_count; }
 
-        void swap(rbtree& other) {
-            TinySTL::swap(m_sentinel, other.m_sentinel);
-            TinySTL::swap(m_node_count, other.m_node_count);
-            TinySTL::swap(m_key_compare, other.m_key_compare);
+        friend void swap(rbtree& lhs, rbtree& rhs) noexcept {
+            using TinySTL::swap;
+            swap(lhs.m_sentinel, rhs.m_sentinel);
+            swap(lhs.m_node_count, rhs.m_node_count);
+            swap(lhs.m_key_compare, rhs.m_key_compare);
         }
 
-        bool operator==(const rbtree& other) const {
-            return (m_node_count == other.m_node_count) && equal(begin(), end(), other.begin());
+        friend bool operator==(const rbtree& lhs, const rbtree& rhs) noexcept {
+            return (lhs.size() == rhs.size()) && equal(lhs.begin(), lhs.end(), rhs.begin());
         }
 
-        bool operator!=(const rbtree& other) const {
-            return !(*this == other);
+        friend bool operator!=(const rbtree& lhs, const rbtree& rhs) noexcept {
+            return !(lhs == rhs);
         }
 
-        bool operator<(const rbtree& other) const {
-            return lexicographical_compare(begin(), end(), other.begin(), other.end());
+        friend bool operator<(const rbtree& lhs, const rbtree& rhs) noexcept {
+            return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+
+        friend bool operator<=(const rbtree& lhs, const rbtree& rhs) noexcept {
+            return !(rhs < lhs);
+        }
+
+        friend bool operator>(const rbtree& lhs, const rbtree& rhs) noexcept {
+            return rhs < lhs;
+        }
+
+        friend bool operator>=(const rbtree& lhs, const rbtree& rhs) noexcept {
+            return !(lhs < rhs);
         }
 
     private:
@@ -734,9 +747,7 @@ namespace TinySTL {
         }
 
         void erase(iterator pos) {
-            link_type y = static_cast<link_type>(rbtree_rebalance_for_erase(
-                pos.m_node, root(), leftmost(), rightmost()
-            ));
+            link_type y = static_cast<link_type>(rbtree_rebalance_for_erase(pos.m_node, root(), leftmost(), rightmost()));
             destroy_node(y);
             --m_node_count;
         }

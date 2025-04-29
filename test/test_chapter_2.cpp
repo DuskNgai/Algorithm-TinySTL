@@ -1,9 +1,8 @@
-#include <random>
-
 #include <gtest/gtest.h>
 
 #include <Part 1/Chapter 2/InsertionSort.hpp>
 #include <Part 1/Chapter 2/MergeSort.hpp>
+#include <random>
 #include <stl_algorithm.hpp>
 #include <stl_vector.hpp>
 
@@ -21,7 +20,7 @@ protected:
     virtual void SetUp() override {
         {
             // Repeating terms.
-            int data[] {11, 1, 51, 1, 5, 3};
+            int data[]{ 11, 1, 51, 1, 5, 3 };
             repeat = repeat_copy = TinySTL::vector<int>(std::begin(data), std::end(data));
         }
         {
@@ -30,22 +29,22 @@ protected:
         }
         {
             // Negative number.
-            int data[] {1, 1, -5, 6};
+            int data[]{ 1, 1, -5, 6 };
             negative = negative_copy = TinySTL::vector<int>(std::begin(data), std::end(data));
         }
         {
             // Floating point.
-            double data[] {11, -4, 20, 15, 13.5, -20};
+            double data[]{ 11, -4, 20, 15, 13.5, -20 };
             fp = fp_copy = TinySTL::vector<double>(std::begin(data), std::end(data));
         }
         {
             // Already sorted array.
-            int data[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+            int data[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             sorted = sorted_copy = TinySTL::vector<int>(std::begin(data), std::end(data));
         }
         {
             // Array in reversed sorted order.
-            int data[] {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+            int data[]{ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
             reversed = reversed_copy = TinySTL::vector<int>(std::begin(data), std::end(data));
         }
         {
@@ -53,7 +52,9 @@ protected:
             std::mt19937_64 rng(0);
             std::uniform_int_distribution<int> dist(-5000, 5000);
             large.reserve(1000);
-            TinySTL::generate_n(TinySTL::back_inserter(large), 1000, [&](){ return dist(rng); });
+            TinySTL::generate_n(TinySTL::back_inserter(large), 1000, [&]() {
+                return dist(rng);
+            });
             large_copy.insert(large_copy.end(), large.begin(), large.end());
         }
     }

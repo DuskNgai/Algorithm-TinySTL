@@ -1,8 +1,7 @@
-#include <random>
-
 #include <gtest/gtest.h>
 
 #include <Part 1/Chapter 4/MatrixMultiply.hpp>
+#include <random>
 #include <stl_algorithm.hpp>
 #include <stl_vector.hpp>
 
@@ -56,7 +55,9 @@ TEST_F(TestMatrixMultiply, MatrixMultiplyRandom) {
     std::mt19937_64 rng(0);
     std::uniform_int_distribution<int> dist(-10, 10);
     Algorithm::SquareMatrix<int> d(n), e(n), f(n), g(n);
-    TinySTL::generate_n(d.begin(), n * n, [&]() { return dist(rng); });
+    TinySTL::generate_n(d.begin(), n * n, [&]() {
+        return dist(rng);
+    });
 
     Algorithm::MatrixMultiply(a, b, e);
     Algorithm::MatrixMultiplyRecursive(a, b, f);

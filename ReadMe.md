@@ -13,6 +13,7 @@ In the first round, we will go through the whole book. In the second round, we w
 一个支持 `C++11` 标准的编译器。我们在以下平台 + 编译器的组合上测试了我们的程序：
 
 - `Windows` + `Visual Studio 2022`
+- `MacOS` + `clang 15`
 
 请按照以下的流程编译程序：
 

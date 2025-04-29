@@ -63,7 +63,7 @@ namespace Algorithm {
         }
 
         void decrement() {
-            if (m_node->color == avltree_red && m_node->parent->parent == m_node) {
+            if (m_node->parent->parent == m_node) {
                 m_node = m_node->right;
             }
             else if (m_node->left != nullptr) {
@@ -119,8 +119,8 @@ namespace Algorithm {
             return temp;
         }
 
-        bool operator==(const self& other) const { return m_node == other.m_node; }
-        bool operator!=(const self& other) const { return m_node != other.m_node; }
+        friend bool operator==(const map& lhs, const map& rhs) noexcept { return lhs.m_node == rhs.m_node; }
+        friend bool operator!=(const map& lhs, const map& rhs) noexcept { return !(lhs == rhs); }
     };
 
     // Update the height of an AVL-tree node `x` by its 2 childrens.
@@ -389,21 +389,34 @@ namespace Algorithm {
         size_t size() const { return m_node_count; }
 
         void swap(avltree& other) {
-            std::swap(m_sentinel, other.m_sentinel);
-            std::swap(m_node_count, other.m_node_count);
-            std::swap(m_key_compare, other.m_key_compare);
+            using std::swap;
+            swap(m_sentinel, other.m_sentinel);
+            swap(m_node_count, other.m_node_count);
+            swap(m_key_compare, other.m_key_compare);
         }
 
-        bool operator==(const avltree& other) const {
-            return (m_node_count == other.m_node_count) && std::equal(begin(), end(), other.begin());
+        friend bool operator==(const avltree& lhs, const avltree& rhs) noexcept {
+            return (lhs.m_node_count == rhs.m_node_count) && std::equal(lhs.begin(), lhs.end(), rhs.begin());
         }
 
-        bool operator!=(const avltree& other) const {
-            return !(*this == other);
+        friend bool operator!=(const avltree& lhs, const avltree& rhs) noexcept {
+            return !(lhs == rhs);
         }
 
-        bool operator<(const avltree& other) const {
-            return std::lexicographical_compare(begin(), end(), other.begin(), other.end());
+        friend bool operator<(const avltree& lhs, const avltree& rhs) noexcept {
+            return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+
+        friend bool operator<=(const avltree& lhs, const avltree& rhs) noexcept {
+            return !(rhs < lhs);
+        }
+
+        friend bool operator>(const avltree& lhs, const avltree& rhs) noexcept {
+            return rhs < lhs;
+        }
+
+        friend bool operator>=(const avltree& lhs, const avltree& rhs) noexcept {
+            return !(lhs < rhs);
         }
 
     private:

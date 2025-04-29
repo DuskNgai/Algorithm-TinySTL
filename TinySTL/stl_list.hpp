@@ -11,11 +11,9 @@ namespace TinySTL {
 
     template <typename T>
     struct list_node {
-        // clang-format off
         list_node<T>* prev;
         list_node<T>* next;
-        T             data;
-        // clang-format on
+        T data;
     };
 
     template <typename T, typename Ref, typename Ptr>
@@ -41,8 +39,13 @@ namespace TinySTL {
         list_iterator(const iterator& other)
             : m_inner(other.m_inner) {}
 
-        bool operator==(const self& other) const { return m_inner == other.m_inner; }
-        bool operator!=(const self& other) const { return m_inner != other.m_inner; }
+        friend bool operator==(const self& lhs, const self& rhs) noexcept { return lhs.m_inner == rhs.m_inner; }
+        friend bool operator!=(const self& lhs, const self& rhs) noexcept { return !(lhs == rhs); }
+        friend bool operator<(const self& lhs, const self& rhs) noexcept { return lhs.m_inner < rhs.m_inner; }
+        friend bool operator>(const self& lhs, const self& rhs) noexcept { return rhs < lhs; }
+        friend bool operator<=(const self& lhs, const self& rhs) noexcept { return !(rhs < lhs); }
+        friend bool operator>=(const self& lhs, const self& rhs) noexcept { return !(lhs < rhs); }
+
         reference operator*() const { return m_inner->data; }
         pointer operator->() const { return &(operator*()); }
 
@@ -68,12 +71,12 @@ namespace TinySTL {
 
     template <typename T, typename Ref, typename Ptr>
     constexpr ptrdiff_t* distance_type(const list_iterator<T, Ref, Ptr>&) {
-        return static_cast<ptrdiff_t*>(0);
+        return nullptr;
     }
 
     template <typename T, typename Ref, typename Ptr>
     constexpr T* value_type(const list_iterator<T, Ref, Ptr>&) {
-        return static_cast<T*>(0);
+        return nullptr;
     }
 
     template <typename T, typename Ref, typename Ptr>
@@ -84,11 +87,10 @@ namespace TinySTL {
     template <typename T, typename Alloc = alloc>
     class list {
     public:
-        // clang-format off
         using value_type      = T;
         using pointer         = T*;
         using reference       = T&;
-        using size_type       = size_t ;
+        using size_type       = size_t;
         using difference_type = ptrdiff_t;
         using const_pointer   = const T*;
         using const_reference = const T&;
@@ -98,7 +100,6 @@ namespace TinySTL {
 
         using iterator       = list_iterator<T, T&, T*>;
         using const_iterator = list_iterator<T, const T&, const T*>;
-        // clang-format on
 
     protected:
         node* m_sentinel;
@@ -194,26 +195,36 @@ namespace TinySTL {
         const_reference front() const { return *begin(); }
         const_reference back() const { return *(--end()); }
 
-        bool operator==(const list& other) const {
-            node* e1 = m_sentinel;
-            node* e2 = other.m_sentinel;
-            node* b1 = m_sentinel->next;
-            node* b2 = other.m_sentinel->next;
+        friend bool operator==(const list& lhs, const list& rhs) {
+            auto b1 = lhs.begin(), e1 = lhs.end();
+            auto b2 = rhs.begin(), e2 = rhs.end();
             // Same data.
-            for (; b1 != e2 && b2 != e2; b1 = b1->next, b2 = b2->next) {
-                if (b1->data != b2->data)
+            for (; b1 != e1 && b2 != e2; ++b1, ++b2) {
+                if (*b1 != *b2)
                     return false;
             }
             // Same size.
-            return b1 == e2 && b2 == e2;
+            return b1 == e1 && b2 == e2;
         }
 
-        bool operator!=(const list& other) const {
-            return !operator==(other);
+        friend bool operator!=(const list& lhs, const list& rhs) {
+            return !(lhs == rhs);
         }
 
-        bool operator<(const list& other) const {
-            return TinySTL::lexicographical_compare(begin(), end(), other.begin(), other.end());
+        friend bool operator<(const list& lhs, const list& rhs) {
+            return TinySTL::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+
+        friend bool operator>(const list& lhs, const list& rhs) {
+            return rhs < lhs;
+        }
+
+        friend bool operator<=(const list& lhs, const list& rhs) {
+            return !(rhs < lhs);
+        }
+
+        friend bool operator>=(const list& lhs, const list& rhs) {
+            return !(lhs < rhs);
         }
 
         iterator insert(iterator pos, const T& value = value_type()) {
@@ -255,6 +266,7 @@ namespace TinySTL {
             put_node(pos.m_inner);
             return iterator(next_node);
         }
+
         iterator erase(iterator first, iterator last) {
             while (first != last) {
                 erase(first++);
@@ -295,8 +307,9 @@ namespace TinySTL {
             m_sentinel->prev = m_sentinel;
         }
 
-        void swap(list& other) {
-            TinySTL::swap(m_sentinel, other.m_sentinel);
+        friend void swap(list& lhs, list& rhs) noexcept {
+            using TinySTL::swap;
+            swap(lhs.m_sentinel, rhs.m_sentinel);
         }
 
         void remove(const T& value) {

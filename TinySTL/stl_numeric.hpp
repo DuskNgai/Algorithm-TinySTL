@@ -34,7 +34,7 @@ namespace TinySTL {
             auto next = *first;
             // always next - prev
             *++result = next - prev;
-            prev = next;
+            prev      = next;
         }
         return ++result;
     }
@@ -51,7 +51,7 @@ namespace TinySTL {
         while (++first != last) {
             auto next = *first;
             *++result = op(next, prev);
-            prev = next;
+            prev      = next;
         }
         return ++result;
     }
@@ -66,7 +66,7 @@ namespace TinySTL {
 
         auto sum = *first;
         while (++first != last) {
-            sum = sum + *first;
+            sum       = sum + *first;
             *++result = sum;
         }
         return ++result;
@@ -82,7 +82,7 @@ namespace TinySTL {
 
         auto sum = *first;
         while (++first != last) {
-            sum = op(sum, *first);
+            sum       = op(sum, *first);
             *++result = sum;
         }
         return ++result;

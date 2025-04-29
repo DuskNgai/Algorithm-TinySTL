@@ -1,8 +1,7 @@
-#include <random>
-
 #include <gtest/gtest.h>
 
 #include <Part 3/Chapter 12/BinarySearchTree.hpp>
+#include <random>
 #include <stl_vector.hpp>
 
 class TestBinarySearchTree : public testing::Test {
@@ -20,7 +19,7 @@ protected:
             }
         }
         {
-            int data[] = {15, 18, 6, 3, 2, 4, 7, 13, 9, 17, 20};
+            int data[] = { 15, 18, 6, 3, 2, 4, 7, 13, 9, 17, 20 };
             for (auto&& i : data) {
                 m_nodes.push_back(new Algorithm::Node<int>(i));
                 m_tree2.Insert(m_nodes.back());
@@ -63,12 +62,14 @@ TEST_F(TestBinarySearchTree, TestBinarySearchTree) {
 }
 
 TEST_F(TestBinarySearchTree, a) {
+    // clang-format off
     std::cout << "Preorder:     "; m_tree2.Preorder();
     std::cout << "Inorder:      "; m_tree2.Inorder();
     std::cout << "Postorder:    "; m_tree2.Postorder();
     std::cout << "BreadthFirst: "; m_tree2.BreadthFirst();
     std::cout << "DepthFirst:   "; m_tree2.DepthFirst();
     std::cout << "Deleting one by one:" << std::endl;
+    // clang-format on
     while (m_tree2.Root()) {
         m_tree2.Inorder();
         m_tree2.Erase(m_tree2.Root());

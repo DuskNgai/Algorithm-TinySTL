@@ -8,16 +8,8 @@ namespace TinySTL {
         using first_type  = T1;
         using second_type = T2;
 
-        T1 first;
-        T2 second;
-
-        pair()
-            : first(T1()), second(T2()) {}
-        pair(const T1& t1, const T2& t2)
-            : first(t1), second(t2) {}
-        pair(T1&& t1, T2&& t2) noexcept
-            : first(std::move(t1)), second(std::move(t2)) {}
-        ~pair() = default;
+        T1 first{};
+        T2 second{};
     };
 
     template <typename T1, typename T2>

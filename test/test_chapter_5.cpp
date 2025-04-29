@@ -1,7 +1,6 @@
-#include <random>
-
 #include <gtest/gtest.h>
 
+#include <random>
 #include <stl_algorithm.hpp>
 #include <stl_vector.hpp>
 
@@ -12,7 +11,7 @@ protected:
 protected:
     virtual void SetUp() override {
         {
-            int data[] = {4, 2, 9, 1, 0};
+            int data[] = { 4, 2, 9, 1, 0 };
             list1.insert(list1.end(), std::begin(data), std::end(data));
         }
     }

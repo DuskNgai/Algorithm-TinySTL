@@ -126,53 +126,53 @@ namespace TinySTL {
 
     public:
         vector()
-            : m_start(nullptr), m_finish(nullptr), m_end_of_storage(nullptr) {}
+            : m_start(nullptr)
+            , m_finish(nullptr)
+            , m_end_of_storage(nullptr) {}
 
-        vector(size_type n, const T& value = value_type()) {
-            m_start          = vector_allocator::allocate(n);
-            m_finish         = TinySTL::uninitialized_fill_n(begin(), n, value);
-            m_end_of_storage = m_finish;
-        }
+        vector(size_type n, const T& value = value_type())
+            : m_start(vector_allocator::allocate(n))
+            , m_finish(TinySTL::uninitialized_fill_n(m_start, n, value))
+            , m_end_of_storage(m_start + n) {}
 
-        vector(const vector& other) {
-            m_start          = vector_allocator::allocate(other.size());
-            m_finish         = TinySTL::uninitialized_copy(other.begin(), other.end(), begin());
-            m_end_of_storage = m_finish;
-        }
+        vector(const vector& other)
+            : m_start(vector_allocator::allocate(other.size()))
+            , m_finish(TinySTL::uninitialized_copy(other.m_start, other.m_finish, m_start))
+            , m_end_of_storage(m_start + other.size()) {}
 
-        vector(const value_type* first, const value_type* last) {
-            m_start          = vector_allocator::allocate(distance(first, last));
-            m_finish         = TinySTL::uninitialized_copy(first, last, begin());
-            m_end_of_storage = m_finish;
-        }
+        vector(vector&& other) noexcept
+            : m_start(std::exchange(other.m_start, nullptr))
+            , m_finish(std::exchange(other.m_finish, nullptr))
+            , m_end_of_storage(std::exchange(other.m_end_of_storage, nullptr)) {}
 
-        vector(const iterator first, const iterator last) {
-            m_start          = vector_allocator::allocate(distance(first, last));
-            m_finish         = TinySTL::uninitialized_copy(first, last, begin());
-            m_end_of_storage = m_finish;
-        }
+        vector(const value_type* first, const value_type* last)
+            : m_start(vector_allocator::allocate(std::distance(first, last)))
+            , m_finish(TinySTL::uninitialized_copy(first, last, m_start))
+            , m_end_of_storage(m_finish) {}
+
+        vector(const iterator first, const iterator last)
+            : m_start(vector_allocator::allocate(std::distance(first, last)))
+            , m_finish(TinySTL::uninitialized_copy(first, last, m_start))
+            , m_end_of_storage(m_finish) {}
 
         vector& operator=(const vector& other) {
             if (this != &other) {
-                // Destroy and deallocation old space.
-                destory(begin(), end());
-                vector_allocator::deallocate(begin(), capacity());
-                // Allocate new space.
-                m_start          = vector_allocator::allocate(other.size());
-                m_finish         = TinySTL::uninitialized_copy(other.begin(), other.end(), begin());
-                m_end_of_storage = m_finish;
+                vector temp(other);
+                swap(*this, temp);
+            }
+            return *this;
+        }
+
+        vector& operator=(vector&& other) noexcept {
+            if (this != &other) {
+                swap(*this, other);
             }
             return *this;
         }
 
         ~vector() {
-            // Destroy and deallocation old space.
-            destory(m_start, m_finish);
+            clear();
             vector_allocator::deallocate(m_start, capacity());
-            // Reset the iterator.
-            m_start          = nullptr;
-            m_finish         = nullptr;
-            m_end_of_storage = nullptr;
         }
 
     public:
@@ -427,22 +427,35 @@ namespace TinySTL {
             }
         }
 
-        void swap(vector& other) {
-            TinySTL::swap(m_start, other.m_start);
-            TinySTL::swap(m_finish, other.m_finish);
-            TinySTL::swap(m_end_of_storage, other.m_end_of_storage);
+        friend void swap(vector& lhs, vector& rhs) noexcept {
+            using TinySTL::swap;
+            swap(lhs.m_start, rhs.m_start);
+            swap(lhs.m_finish, rhs.m_finish);
+            swap(lhs.m_end_of_storage, rhs.m_end_of_storage);
         }
 
-        bool operator==(const vector& other) const {
-            return size() == other.size() && equal(begin(), end(), other.begin());
+        friend bool operator==(const vector& lhs, const vector& rhs) noexcept {
+            return lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin());
         }
 
-        bool operator!=(const vector& other) const {
-            return !operator==(other);
+        friend bool operator!=(const vector& lhs, const vector& rhs) noexcept {
+            return !(lhs == rhs);
         }
 
-        bool operator<(const vector& other) const {
-            return TinySTL::lexicographical_compare(begin(), end(), other.begin(), other.end());
+        friend bool operator<(const vector& lhs, const vector& rhs) noexcept {
+            return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+
+        friend bool operator>(const vector& lhs, const vector& rhs) noexcept {
+            return rhs < lhs;
+        }
+
+        friend bool operator<=(const vector& lhs, const vector& rhs) noexcept {
+            return !(rhs < lhs);
+        }
+
+        friend bool operator>=(const vector& lhs, const vector& rhs) noexcept {
+            return !(lhs < rhs);
         }
     };
 

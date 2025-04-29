@@ -131,8 +131,12 @@ namespace TinySTL {
         TinySTL::pair<iterator, iterator> equal_range(const key_type& x) { return t.equal_range(x); }
         TinySTL::pair<const_iterator, const_iterator> equal_range(const key_type& x) const { return t.equal_range(x); }
 
-        bool operator==(const multimap& other) const { return t == other.t; }
-        bool operator<(const multimap& other) const { return t < other.t; }
+        friend bool operator==(const map& lhs, const map& rhs) noexcept { return lhs.t == rhs.t; }
+        friend bool operator!=(const map& lhs, const map& rhs) noexcept { return !(lhs == rhs); }
+        friend bool operator<(const map& lhs, const map& rhs) noexcept { return lhs.t < rhs.t; }
+        friend bool operator>(const map& lhs, const map& rhs) noexcept { return rhs < lhs; }
+        friend bool operator<=(const map& lhs, const map& rhs) noexcept { return !(rhs < lhs); }
+        friend bool operator>=(const map& lhs, const map& rhs) noexcept { return !(lhs < rhs); }
     };
 
 } // namespace TinySTL

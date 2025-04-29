@@ -95,13 +95,13 @@ namespace TinySTL {
     // Determine iterator distance type.
     template <typename I>
     constexpr typename iterator_traits<I>::difference_type* __distance_type(const I&) {
-        return static_cast<typename iterator_traits<I>::difference_type*>(0);
+        return nullptr;
     }
 
     // Determine iterator value type.
     template <typename I>
     constexpr typename iterator_traits<I>::value_type* __value_type(const I&) {
-        return static_cast<typename iterator_traits<I>::value_type*>(0);
+        return nullptr;
     }
 
     // Determine iterator category.
@@ -190,14 +190,12 @@ namespace TinySTL {
         Container* container;
 
     public:
-        // clang-format off
         using container_type    = Container;
         using value_type        = void;
         using pointer           = void;
         using reference         = void;
         using difference_type   = void;
         using iterator_category = output_iterator_tag;
-        // clang-format on
 
         explicit back_insert_iterator(Container& c) noexcept
             : container(&c) {}
@@ -225,14 +223,12 @@ namespace TinySTL {
         Container* container;
 
     public:
-        // clang-format off
         using container_type    = Container;
         using value_type        = void;
         using pointer           = void;
         using reference         = void;
         using difference_type   = void;
         using iterator_category = output_iterator_tag;
-        // clang-format on
 
         explicit front_insert_iterator(Container& c)
             : container(&c) {}
@@ -261,14 +257,12 @@ namespace TinySTL {
         typename Container::iterator iter;
 
     public:
-        // clang-format off
         using container_type    = Container;
         using value_type        = void;
         using pointer           = void;
         using reference         = void;
         using difference_type   = void;
         using iterator_category = output_iterator_tag;
-        // clang-format on
 
         insert_iterator(Container& c, typename Container::iterator it)
             : container(&c), iter(it) {}
@@ -310,13 +304,11 @@ namespace TinySTL {
         }
 
     public:
-        // clang-format off
         using value_type        = T;
         using pointer           = const T*;
         using reference         = const T&;
         using difference_type   = Diff;
         using iterator_category = input_iterator_tag;
-        // clang-format on
 
         istream_iterator()
             : is(&std::cin), end_marker(false) {}
@@ -348,13 +340,11 @@ namespace TinySTL {
         const char* str;
 
     public:
-        // clang-format off
         using value_type        = void;
         using pointer           = void;
         using reference         = void;
         using difference_type   = void;
         using iterator_category = output_iterator_tag;
-        // clang-format on
 
         ostream_iterator(std::ostream& s, const char* c = nullptr)
             : os(&s), str(c) {}
@@ -379,15 +369,13 @@ namespace TinySTL {
         Iterator current;
 
     public:
-        // clang-format off
         using iterator_category = typename iterator_traits<Iterator>::iterator_category;
         using value_type        = typename iterator_traits<Iterator>::value_type;
         using pointer           = typename iterator_traits<Iterator>::pointer;
         using reference         = typename iterator_traits<Iterator>::reference;
         using difference_type   = typename iterator_traits<Iterator>::difference_type;
-    
+
         using self = reverse_iterator<Iterator>;
-        // clang-format on
 
     public:
         reverse_iterator() {}
@@ -457,9 +445,12 @@ namespace TinySTL {
             return *(*this + n);
         }
 
-        bool operator==(const reverse_iterator& other) const { return this->base() == other.base(); }
-        bool operator!=(const reverse_iterator& other) const { return this->base() != other.base(); }
-        bool operator<(const reverse_iterator& other) const { return other.base() < this->base(); }
+        friend bool operator==(const reverse_iterator& lhs, const reverse_iterator& rhs) noexcept { return lhs.base() == rhs.base(); }
+        friend bool operator!=(const reverse_iterator& lhs, const reverse_iterator& rhs) noexcept { return !(lhs == rhs); }
+        friend bool operator<(const reverse_iterator& lhs, const reverse_iterator& rhs) noexcept { return rhs.base() < lhs.base(); }
+        friend bool operator<=(const reverse_iterator& lhs, const reverse_iterator& rhs) noexcept { return !(rhs < lhs); }
+        friend bool operator>(const reverse_iterator& lhs, const reverse_iterator& rhs) noexcept { return rhs < lhs; }
+        friend bool operator>=(const reverse_iterator& lhs, const reverse_iterator& rhs) noexcept { return !(lhs < rhs); }
 
         difference_type operator-(const reverse_iterator& other) const {
             return difference_type(other.base() - this->base());

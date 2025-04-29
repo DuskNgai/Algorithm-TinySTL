@@ -29,9 +29,12 @@ namespace TinySTL {
         reference top() { return container.back(); }
         const_reference top() const { return container.back(); }
 
-        bool operator==(const stack& other) const { return container == other.container; }
-        bool operator!=(const stack& other) const { return container != other.container; }
-        bool operator<(const stack& other) const { return container < other.container; }
+        friend bool operator==(const stack& lhs, const stack& rhs) { return lhs.container == rhs.container; }
+        friend bool operator!=(const stack& lhs, const stack& rhs) { return lhs.container != rhs.container; }
+        friend bool operator<(const stack& lhs, const stack& rhs) { return lhs.container < rhs.container; }
+        friend bool operator>(const stack& lhs, const stack& rhs) { return lhs.container > rhs.container; }
+        friend bool operator<=(const stack& lhs, const stack& rhs) { return lhs.container <= rhs.container; }
+        friend bool operator>=(const stack& lhs, const stack& rhs) { return lhs.container >= rhs.container; }
 
         void push(const value_type& value) { container.push_back(value); }
         void pop() { container.pop_back(); }

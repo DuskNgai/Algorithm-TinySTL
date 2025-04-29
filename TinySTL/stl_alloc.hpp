@@ -87,7 +87,7 @@ namespace TinySTL {
         }
     }
 
-    typedef __malloc_alloc_template<0> malloc_alloc;
+    using malloc_alloc = __malloc_alloc_template<0>;
 
     // Encapsule the `alloc` as an interface.
     template <class T, class Alloc>
@@ -173,7 +173,7 @@ namespace TinySTL {
     size_t __default_alloc_template<threads, inst>::heap_size = 0;
 
     template <bool threads, int inst>
-    typename __default_alloc_template<threads, inst>::obj* volatile __default_alloc_template<threads, inst>::free_list[_NFREELISTS] = {0};
+    typename __default_alloc_template<threads, inst>::obj* volatile __default_alloc_template<threads, inst>::free_list[_NFREELISTS] = { 0 };
 
     template <bool threads, int inst>
     void* __default_alloc_template<threads, inst>::allocate(size_t n) {

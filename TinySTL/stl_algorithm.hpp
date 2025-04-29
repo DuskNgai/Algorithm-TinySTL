@@ -245,6 +245,13 @@ namespace TinySTL {
         b      = temp;
     }
 
+    template <typename T>
+    constexpr void swap(T&& a, T&& b) {
+        T temp = std::move(a);
+        a      = std::move(b);
+        b      = std::move(temp);
+    }
+
     //! O(1)
     // Swap two elements pointed by iterators.
     template <typename ForwardIterator1, typename ForwardIterator2>

@@ -84,13 +84,8 @@ namespace TinySTL {
 
         void increment() { m_inner = m_inner->next; }
 
-        bool operator==(const forward_list_iterator_base& other) const {
-            return m_inner == other.m_inner;
-        }
-
-        bool operator!=(const forward_list_iterator_base& other) const {
-            return m_inner != other.m_inner;
-        }
+        friend bool operator==(const forward_list_iterator_base& lhs, const forward_list_iterator_base& rhs) noexcept { return lhs.m_inner == rhs.m_inner; }
+        friend bool operator!=(const forward_list_iterator_base& lhs, const forward_list_iterator_base& rhs) noexcept { return !(lhs == rhs); }
     };
 
     template <typename T, typename Ref, typename Ptr>
@@ -127,12 +122,12 @@ namespace TinySTL {
     };
 
     constexpr ptrdiff_t* distance_type(const forward_list_iterator_base&) {
-        return static_cast<ptrdiff_t*>(0);
+        return nullptr;
     }
 
     template <typename T, typename Ref, typename Ptr>
     constexpr T* value_type(const forward_list_iterator<T, Ref, Ptr>&) {
-        return static_cast<T*>(0);
+        return nullptr;
     }
 
     constexpr forward_iterator_tag iterator_category(const forward_list_iterator_base&) {
@@ -156,11 +151,9 @@ namespace TinySTL {
         using forward_list_allocator = simple_alloc<forward_list_node<T>, Alloc>;
 
     private:
-        // clang-format off
         using list_node      = forward_list_node<T>;
         using list_node_base = forward_list_node_base;
         using iterator_base  = forward_list_iterator_base;
-        // clang-format on
 
         list_node* get_node() { return forward_list_allocator::allocate(); }
 
@@ -309,8 +302,9 @@ namespace TinySTL {
             return const_iterator((list_node*)forward_list_previous(&m_head, pos.m_inner));
         }
 
-        void swap(forward_list& other) {
-            TinySTL::swap(m_head.next, other.m_head.next);
+        friend void swap(forward_list& lhs, forward_list& rhs) {
+            using TinySTL::swap;
+            swap(lhs.m_head.next, rhs.m_head.next);
         }
 
         void push_front(const value_type& value) {
@@ -504,9 +498,9 @@ namespace TinySTL {
             }
         }
 
-        bool operator==(const forward_list& other) const {
-            list_node* curr1 = (list_node*)m_head.next;
-            list_node* curr2 = (list_node*)other.m_head.next;
+        friend bool operator==(const forward_list& lhs, const forward_list& rhs) {
+            list_node* curr1 = (list_node*)lhs.m_head.next;
+            list_node* curr2 = (list_node*)rhs.m_head.next;
             while (curr1 && curr2 && curr1->data == curr2->data) {
                 curr1 = (list_node*)curr1->next;
                 curr2 = (list_node*)curr2->next;
@@ -514,8 +508,24 @@ namespace TinySTL {
             return curr1 == nullptr && curr2 == nullptr;
         }
 
-        bool operator<(const forward_list& other) const {
-            return lexicographical_compare(begin(), end(), other.begin(), other.end());
+        friend bool operator!=(const forward_list& lhs, const forward_list& rhs) {
+            return !(lhs == rhs);
+        }
+
+        friend bool operator<(const forward_list& lhs, const forward_list& rhs) {
+            return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+
+        friend bool operator<=(const forward_list& lhs, const forward_list& rhs) {
+            return !(rhs < lhs);
+        }
+
+        friend bool operator>(const forward_list& lhs, const forward_list& rhs) {
+            return rhs < lhs;
+        }
+
+        friend bool operator>=(const forward_list& lhs, const forward_list& rhs) {
+            return !(lhs < rhs);
         }
     };
 
